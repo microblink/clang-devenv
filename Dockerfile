@@ -9,7 +9,8 @@ COPY --from=python /usr/local /usr/local/
 COPY --from=git /usr/local /usr/local/
 
 # install LFS and setup global .gitignore
-RUN git lfs install && \
+RUN yum -y install openssh-clients && \
+    git lfs install && \
     echo "~*" >> ~/.gitignore_global && \
     echo ".DS_Store" >> ~/.gitignore_global && \
     echo "[core]" >> ~/.gitconfig && \
