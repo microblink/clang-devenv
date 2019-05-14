@@ -19,9 +19,14 @@ RUN yum -y install openssh-clients && \
 
 ENV NINJA_STATUS="[%f/%t %c/sec] "
 
-# create gcc/g++ symlinks in /usr/bin (compatibility with legacy gcc conan profile)
+# create gcc/g++ symlinks in /usr/bin (compatibility with legacy clang conan profile)
+# and also replace binutils tools with LLVM version
 RUN ln -s /usr/local/bin/clang /usr/bin/clang && \
-    ln -s /usr/local/bin/clang++ /usr/bin/clang++
+    ln -s /usr/local/bin/clang++ /usr/bin/clang++ && \
+    rm /usr/bin/nm /usr/bin/ranlib /usr/bin/ar && \
+    ln /usr/local/bin/llvm-ar /usr/bin/ar && \
+    ln /usr/local/bin/llvm-nm /usr/bin/nm && \
+    ln /usr/local/bin/llvm-ranlib /usr/bin/ranlib
 
 ARG CMAKE_VERSION=3.14.3
 
