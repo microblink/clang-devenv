@@ -13,7 +13,8 @@ RUN git lfs install && \
     echo "~*" >> ~/.gitignore_global && \
     echo ".DS_Store" >> ~/.gitignore_global && \
     echo "[core]" >> ~/.gitconfig && \
-    echo "	excludesfile = /root/.gitignore_global" >> ~/.gitconfig
+    echo "	excludesfile = /root/.gitignore_global" >> ~/.gitconfig && \
+    dbus-uuidgen > /etc/machine-id
 
 ENV NINJA_STATUS="[%f/%t %c/sec] "
 
