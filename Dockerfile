@@ -8,13 +8,15 @@ COPY --from=ninja /usr/local/bin/ninja /usr/local/bin/
 COPY --from=python /usr/local /usr/local/
 COPY --from=git /usr/local /usr/local/
 
-# install LFS and setup global .gitignore
+# install LFS and setup global .gitignore for both
+# root and every other user logged with -u user:group docker run parameter
 RUN yum -y install openssh-clients && \
     git lfs install && \
-    echo "~*" >> ~/.gitignore_global && \
-    echo ".DS_Store" >> ~/.gitignore_global && \
-    echo "[core]" >> ~/.gitconfig && \
-    echo "	excludesfile = /root/.gitignore_global" >> ~/.gitconfig && \
+    echo "~*" >> /.gitignore_global && \
+    echo ".DS_Store" >> /.gitignore_global && \
+    echo "[core]" >> /root/.gitconfig && \
+    echo "	excludesfile = /.gitignore_global" >> /root/.gitconfig && \
+    cp /root/.gitconfig /.config && \
     dbus-uuidgen > /etc/machine-id
 
 ENV NINJA_STATUS="[%f/%t %c/sec] "
@@ -28,7 +30,7 @@ RUN ln -s /usr/local/bin/clang /usr/bin/clang && \
     ln /usr/local/bin/llvm-nm /usr/bin/nm && \
     ln /usr/local/bin/llvm-ranlib /usr/bin/ranlib
 
-ARG CMAKE_VERSION=3.14.3
+ARG CMAKE_VERSION=3.14.4
 
 # download and install CMake
 RUN cd /home && \
@@ -50,4 +52,8 @@ RUN mkdir -p /home/source           && \
     mkdir -p /home/build            && \
     mkdir -p /home/test-data        && \
     mkdir -p /home/secure-test-data && \
-    mkdir -p ~/.conan
+    mkdir -p ~/.conan               && \
+    mkdir -p ~/.ssh                 && \
+    mkdir -p /.conan                && \
+    mkdir -p /.ssh                  && \
+    chmod 777 /home/* ~/.conan /.conan /.ssh
