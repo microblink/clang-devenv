@@ -52,8 +52,4 @@ RUN mkdir -p /home/source           && \
     mkdir -p /home/build            && \
     mkdir -p /home/test-data        && \
     mkdir -p /home/secure-test-data && \
-    mkdir -p ~/.conan               && \
-    mkdir -p ~/.ssh                 && \
-    mkdir -p /.conan                && \
-    mkdir -p /.ssh                  && \
-    chmod 777 /home/* ~/.conan /.conan /.ssh
+    chmod --recursive 777 /home
