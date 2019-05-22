@@ -1,12 +1,14 @@
 FROM microblinkdev/centos-ninja:1.9.0 as ninja
 FROM microblinkdev/centos-python:3.7.3 as python
 FROM microblinkdev/centos-git:2.21.0 as git
+FROM microblinkdev/centos-ccache:3.7.1 as ccache
 
 FROM microblinkdev/centos-clang:8.0.0
 
 COPY --from=ninja /usr/local/bin/ninja /usr/local/bin/
 COPY --from=python /usr/local /usr/local/
 COPY --from=git /usr/local /usr/local/
+COPY --from=ccache /usr/local /usr/local/
 
 # install LFS and setup global .gitignore for both
 # root and every other user logged with -u user:group docker run parameter
@@ -28,7 +30,8 @@ RUN ln -s /usr/local/bin/clang /usr/bin/clang && \
     rm /usr/bin/nm /usr/bin/ranlib /usr/bin/ar && \
     ln /usr/local/bin/llvm-ar /usr/bin/ar && \
     ln /usr/local/bin/llvm-nm /usr/bin/nm && \
-    ln /usr/local/bin/llvm-ranlib /usr/bin/ranlib
+    ln /usr/local/bin/llvm-ranlib /usr/bin/ranlib && \
+    ln -s /usr/local/bin/ccache /usr/bin/ccache
 
 ARG CMAKE_VERSION=3.14.4
 
