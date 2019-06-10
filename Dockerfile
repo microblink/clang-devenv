@@ -1,6 +1,6 @@
 FROM microblinkdev/centos-ninja:1.9.0 as ninja
 FROM microblinkdev/centos-python:3.7.3 as python
-FROM microblinkdev/centos-git:2.21.0 as git
+FROM microblinkdev/centos-git:2.22.0 as git
 FROM microblinkdev/centos-ccache:3.7.1 as ccache
 
 FROM microblinkdev/centos-clang:8.0.0
@@ -19,7 +19,12 @@ RUN yum -y install openssh-clients glibc-static && \
     echo "[core]" >> /root/.gitconfig && \
     echo "	excludesfile = /.gitignore_global" >> /root/.gitconfig && \
     cp /root/.gitconfig /.config && \
-    dbus-uuidgen > /etc/machine-id
+    git config --global user.email "developer@microblink.com" && \
+    git config --global user.name "Developer" && \
+    dbus-uuidgen > /etc/machine-id && \
+    echo "bind '\"\\e[A\": history-search-backward'" >> ~/.bashrc && \
+    echo "bind '\"\\e[B\": history-search-forward'" >> ~/.bashrc && \
+    echo "bind \"set completion-ignore-case on\"" >> ~/.bashrc
 
 ENV NINJA_STATUS="[%f/%t %c/sec] "
 
@@ -33,7 +38,7 @@ RUN ln -s /usr/local/bin/clang /usr/bin/clang && \
     ln /usr/local/bin/llvm-ranlib /usr/bin/ranlib && \
     ln -s /usr/local/bin/ccache /usr/bin/ccache
 
-ARG CMAKE_VERSION=3.14.4
+ARG CMAKE_VERSION=3.14.5
 
 # download and install CMake
 RUN cd /home && \
@@ -45,7 +50,7 @@ RUN cd /home && \
     cd .. && \
     rm -rf *
 
-ARG CONAN_VERSION=1.15.1
+ARG CONAN_VERSION=1.16.0
 
 # download and install conan and LFS and set global .gitignore
 RUN python3 -m pip install conan==${CONAN_VERSION}
