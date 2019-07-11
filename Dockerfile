@@ -1,7 +1,7 @@
 FROM microblinkdev/centos-ninja:1.9.0 as ninja
-FROM microblinkdev/centos-python:3.7.3 as python
-FROM microblinkdev/centos-git:2.22.0 as git
 FROM microblinkdev/centos-ccache:3.7.1 as ccache
+FROM microblinkdev/centos-git:2.22.0 as git
+FROM microblinkdev/centos-python:3.7.4 as python
 
 FROM microblinkdev/centos-clang:8.0.0
 
@@ -50,7 +50,7 @@ RUN cd /home && \
     cd .. && \
     rm -rf *
 
-ARG CONAN_VERSION=1.16.1
+ARG CONAN_VERSION=1.17.0
 
 # download and install conan and LFS and set global .gitignore
 RUN python3 -m pip install conan==${CONAN_VERSION}
