@@ -12,7 +12,7 @@ COPY --from=ccache /usr/local /usr/local/
 
 # install LFS and setup global .gitignore for both
 # root and every other user logged with -u user:group docker run parameter
-RUN yum -y install openssh-clients glibc-static which gtk3-devel && \
+RUN yum -y install openssh-clients glibc-static java-devel which gtk3-devel zip bzip2 make libXt && \
     git lfs install && \
     echo "~*" >> /.gitignore_global && \
     echo ".DS_Store" >> /.gitignore_global && \
@@ -38,6 +38,15 @@ RUN ln -s /usr/local/bin/clang /usr/bin/clang && \
     ln /usr/local/bin/llvm-ranlib /usr/bin/ranlib && \
     ln -s /usr/local/bin/ccache /usr/bin/ccache
 
+ARG FIREFOX_VERSION=70.0
+
+# download and install Firefox
+RUN cd /usr/local && \
+    curl -o firefox.tar.bz2 http://ftp.mozilla.org/pub/firefox/releases/${FIREFOX_VERSION}/linux-x86_64/en-US/firefox-${FIREFOX_VERSION}.tar.bz2 && \
+    tar xf firefox.tar.bz2 && \
+    rm firefox.tar.bz2 && \
+    ln -s /usr/local/firefox/firefox /usr/local/bin/firefox
+
 ARG CMAKE_VERSION=3.15.5
 
 # download and install CMake
@@ -54,6 +63,12 @@ ARG CONAN_VERSION=1.20.2
 
 # download and install conan and LFS and set global .gitignore
 RUN python3 -m pip install conan==${CONAN_VERSION}
+
+# download and install chrome
+RUN cd /home && \
+    curl -o chrome.rpm https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
+    yum -y install chrome.rpm && \
+    rm chrome.rpm
 
 # create development folders (mount points)
 RUN mkdir -p /home/source           && \
