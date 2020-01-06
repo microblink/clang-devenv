@@ -1,5 +1,5 @@
 FROM microblinkdev/centos-ninja:1.9.0 as ninja
-FROM microblinkdev/centos-ccache:3.7.6 as ccache
+FROM microblinkdev/centos-ccache:3.7.7 as ccache
 FROM microblinkdev/centos-git:2.24.0 as git
 FROM microblinkdev/centos-python:3.8.0 as python
 
