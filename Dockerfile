@@ -38,14 +38,14 @@ RUN ln -s /usr/local/bin/clang /usr/bin/clang && \
     ln /usr/local/bin/llvm-ranlib /usr/bin/ranlib && \
     ln -s /usr/local/bin/ccache /usr/bin/ccache
 
-ARG FIREFOX_VERSION=70.0
+# ARG FIREFOX_VERSION=70.0
 
-# download and install Firefox
-RUN cd /usr/local && \
-    curl -o firefox.tar.bz2 http://ftp.mozilla.org/pub/firefox/releases/${FIREFOX_VERSION}/linux-x86_64/en-US/firefox-${FIREFOX_VERSION}.tar.bz2 && \
-    tar xf firefox.tar.bz2 && \
-    rm firefox.tar.bz2 && \
-    ln -s /usr/local/firefox/firefox /usr/local/bin/firefox
+# # download and install Firefox
+# RUN cd /usr/local && \
+#     curl -o firefox.tar.bz2 http://ftp.mozilla.org/pub/firefox/releases/${FIREFOX_VERSION}/linux-x86_64/en-US/firefox-${FIREFOX_VERSION}.tar.bz2 && \
+#     tar xf firefox.tar.bz2 && \
+#     rm firefox.tar.bz2 && \
+#     ln -s /usr/local/firefox/firefox /usr/local/bin/firefox
 
 ARG CMAKE_VERSION=3.15.5
 
