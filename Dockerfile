@@ -12,7 +12,7 @@ COPY --from=ccache /usr/local /usr/local/
 
 # install LFS and setup global .gitignore for both
 # root and every other user logged with -u user:group docker run parameter
-RUN yum -y install openssh-clients glibc-static java-devel which gtk3-devel zip bzip2 make libXt && \
+RUN yum -y install openssh-clients glibc-static java-devel which gtk3-devel zip bzip2 make libXt perl-Digest-MD5 && \
     git lfs install && \
     echo "~*" >> /.gitignore_global && \
     echo ".DS_Store" >> /.gitignore_global && \
