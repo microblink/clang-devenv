@@ -2,8 +2,9 @@ FROM microblinkdev/centos-ninja:1.10.0 as ninja
 FROM microblinkdev/centos-ccache:3.7.7 as ccache
 FROM microblinkdev/centos-git:2.25.0 as git
 FROM microblinkdev/centos-python:3.8.0 as python
+FROM microblinkdev/centos-gcc:9.2.0 as libstdcpp_provider
 
-FROM microblinkdev/centos-clang:8.0.0
+FROM microblinkdev/centos-clang:9.0.1
 
 COPY --from=ninja /usr/local/bin/ninja /usr/local/bin/
 COPY --from=python /usr/local /usr/local/
@@ -69,6 +70,12 @@ RUN cd /home && \
     curl -o chrome.rpm https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
     yum -y install chrome.rpm && \
     rm chrome.rpm
+
+# install libstdc++.so of modern GCC (required by some binaries, such as emscripten)
+
+COPY --from=libstdcpp_provider /usr/local/lib64/libstdc++.so* /usr/local/lib64/
+
+ENV LD_LIBRARY_PATH="/usr/local/lib:/usr/local/lib64"
 
 # create development folders (mount points)
 RUN mkdir -p /home/source           && \
