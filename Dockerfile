@@ -63,7 +63,7 @@ RUN cd /home && \
 ARG CONAN_VERSION=1.22.2
 
 # download and install conan and LFS and set global .gitignore
-RUN python3 -m pip install conan==${CONAN_VERSION}
+RUN python3 -m pip install conan==${CONAN_VERSION} grip
 
 # download and install chrome
 RUN cd /home && \
