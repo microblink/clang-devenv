@@ -83,3 +83,14 @@ RUN mkdir -p /home/source           && \
     mkdir -p /home/test-data        && \
     mkdir -p /home/secure-test-data && \
     chmod --recursive 777 /home
+
+# Install jsawk
+RUN cd /tmp/ && \
+    curl -L http://github.com/micha/jsawk/raw/master/jsawk > jsawk && \
+    chmod 755 jsawk && mv jsawk /usr/bin/ && \
+    yum install -y js
+
+# Install pp
+RUN yum --enablerepo=extras install epel-release -y && \
+    yum install -y perl-PAR-Packer && \
+    yum clean all
