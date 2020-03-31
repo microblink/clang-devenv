@@ -60,7 +60,7 @@ RUN cd /home && \
     cd .. && \
     rm -rf *
 
-ARG CONAN_VERSION=1.23.0
+ARG CONAN_VERSION=1.24.0
 
 # download and install conan and LFS and set global .gitignore
 RUN python3 -m pip install conan==${CONAN_VERSION} grip
