@@ -89,8 +89,8 @@ RUN cd /tmp/ && \
     curl -L http://github.com/micha/jsawk/raw/master/jsawk > jsawk && \
     chmod 755 jsawk && mv jsawk /usr/bin/ && \
     yum install -y js
-
-# Install pp
-RUN yum --enablerepo=extras install epel-release -y && \
-    yum install -y perl-PAR-Packer && \
-    yum clean all
+# Install restry
+RUN yum -y install perl-JSON && \
+    curl -L https://raw.githubusercontent.com/micha/resty/master/pp > /usr/bin/pp && \
+    chmod +x /usr/bin/pp && \
+    sed -i '1 s/^.*$/#!\/usr\/bin\/perl -0007/' /usr/bin/pp
