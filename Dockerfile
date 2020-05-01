@@ -48,7 +48,7 @@ RUN ln -s /usr/local/bin/clang /usr/bin/clang && \
 #     rm firefox.tar.bz2 && \
 #     ln -s /usr/local/firefox/firefox /usr/local/bin/firefox
 
-ARG CMAKE_VERSION=3.16.5
+ARG CMAKE_VERSION=3.17.2
 
 # download and install CMake
 RUN cd /home && \
@@ -60,7 +60,7 @@ RUN cd /home && \
     cd .. && \
     rm -rf *
 
-ARG CONAN_VERSION=1.24.0
+ARG CONAN_VERSION=1.24.1
 
 # download and install conan and LFS and set global .gitignore
 RUN python3 -m pip install conan==${CONAN_VERSION} grip
