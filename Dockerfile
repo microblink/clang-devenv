@@ -1,6 +1,6 @@
 FROM microblinkdev/centos-ninja:1.10.0 as ninja
 FROM microblinkdev/centos-ccache:3.7.9 as ccache
-FROM microblinkdev/centos-git:2.25.0 as git
+FROM microblinkdev/centos-git:2.26.2 as git
 FROM microblinkdev/centos-python:3.8.0 as python
 FROM microblinkdev/centos-gcc:9.2.0 as libstdcpp_provider
 
