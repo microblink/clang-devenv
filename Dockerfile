@@ -1,6 +1,6 @@
 FROM microblinkdev/centos-ninja:1.10.0 as ninja
-FROM microblinkdev/centos-ccache:3.7.9 as ccache
-FROM microblinkdev/centos-git:2.26.2 as git
+FROM microblinkdev/centos-ccache:3.7.10 as ccache
+FROM microblinkdev/centos-git:2.27.0 as git
 FROM microblinkdev/centos-python:3.8.0 as python
 FROM microblinkdev/centos-gcc:9.2.0 as libstdcpp_provider
 
@@ -48,7 +48,7 @@ RUN ln -s /usr/local/bin/clang /usr/bin/clang && \
 #     rm firefox.tar.bz2 && \
 #     ln -s /usr/local/firefox/firefox /usr/local/bin/firefox
 
-ARG CMAKE_VERSION=3.17.2
+ARG CMAKE_VERSION=3.17.3
 
 # download and install CMake
 RUN cd /home && \
