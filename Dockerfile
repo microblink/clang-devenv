@@ -13,7 +13,8 @@ COPY --from=ccache /usr/local /usr/local/
 
 # install LFS and setup global .gitignore for both
 # root and every other user logged with -u user:group docker run parameter
-RUN yum -y install openssh-clients glibc-static java-devel which gtk3-devel zip bzip2 make libXt perl-Digest-MD5 libjpeg-devel openssl-devel && \
+RUN yum -y install epel-release && \
+    yum -y install openssh-clients glibc-static java-devel which gtk3-devel zip bzip2 make libXt perl-Digest-MD5 libjpeg-devel openssl11-devel && \
     git lfs install && \
     echo "~*" >> /.gitignore_global && \
     echo ".DS_Store" >> /.gitignore_global && \
@@ -28,6 +29,9 @@ RUN yum -y install openssh-clients glibc-static java-devel which gtk3-devel zip 
     echo "bind \"set completion-ignore-case on\"" >> ~/.bashrc
 
 ENV NINJA_STATUS="[%f/%t %c/sec] "
+# support for conan packages to discover OpenSSL 1.1.1
+ENV CONAN_CMAKE_CUSTOM_OPENSSL_ROOT_DIR=/usr/include/openssl11
+ENV CONAN_CMAKE_CUSTOM_OPENSSL_LIBRARIES=/usr/lib64/openssl11
 
 # create gcc/g++ symlinks in /usr/bin (compatibility with legacy clang conan profile)
 # and also replace binutils tools with LLVM version
