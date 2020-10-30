@@ -2,7 +2,6 @@ FROM microblinkdev/centos-ninja:1.10.1 as ninja
 FROM microblinkdev/centos-ccache:3.7.11 as ccache
 FROM microblinkdev/centos-git:2.28.0 as git
 FROM microblinkdev/centos-python:3.8.0 as python
-FROM microblinkdev/centos-gcc:9.2.0 as libstdcpp_provider
 
 FROM microblinkdev/centos-clang:9.0.1
 
@@ -46,15 +45,6 @@ RUN ln -s /usr/local/bin/clang /usr/bin/clang && \
     ln /usr/local/bin/llvm-ranlib /usr/bin/ranlib && \
     ln -s /usr/local/bin/ccache /usr/bin/ccache
 
-# ARG FIREFOX_VERSION=70.0
-
-# # download and install Firefox
-# RUN cd /usr/local && \
-#     curl -o firefox.tar.bz2 http://ftp.mozilla.org/pub/firefox/releases/${FIREFOX_VERSION}/linux-x86_64/en-US/firefox-${FIREFOX_VERSION}.tar.bz2 && \
-#     tar xf firefox.tar.bz2 && \
-#     rm firefox.tar.bz2 && \
-#     ln -s /usr/local/firefox/firefox /usr/local/bin/firefox
-
 ARG CMAKE_VERSION=3.18.4
 
 # download and install CMake
@@ -72,15 +62,6 @@ ARG CONAN_VERSION=1.30.2
 # download and install conan and LFS and set global .gitignore
 RUN python3 -m pip install conan==${CONAN_VERSION} grip
 
-# download and install chrome
-RUN cd /home && \
-    curl -o chrome.rpm https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
-    yum -y install chrome.rpm && \
-    rm chrome.rpm
-
-# install libstdc++.so of modern GCC (required by some binaries, such as emscripten)
-
-COPY --from=libstdcpp_provider /usr/local/lib64/libstdc++.so* /usr/local/lib64/
 
 ENV LD_LIBRARY_PATH="/usr/local/lib:/usr/local/lib64"
 
