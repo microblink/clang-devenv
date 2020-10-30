@@ -62,15 +62,7 @@ ARG CONAN_VERSION=1.30.2
 # download and install conan and LFS and set global .gitignore
 RUN python3 -m pip install conan==${CONAN_VERSION} grip
 
-
 ENV LD_LIBRARY_PATH="/usr/local/lib:/usr/local/lib64"
-
-# create development folders (mount points)
-RUN mkdir -p /home/source           && \
-    mkdir -p /home/build            && \
-    mkdir -p /home/test-data        && \
-    mkdir -p /home/secure-test-data && \
-    chmod --recursive 777 /home
 
 # Install jsawk
 RUN cd /tmp/ && \
@@ -82,3 +74,25 @@ RUN yum -y install perl-JSON && \
     curl -L https://raw.githubusercontent.com/micha/resty/master/pp > /usr/bin/pp && \
     chmod +x /usr/bin/pp && \
     sed -i '1 s/^.*$/#!\/usr\/bin\/perl -0007/' /usr/bin/pp
+
+# Install Android SDK
+RUN yum -y install unzip && \
+    cd /home && mkdir android-sdk && cd android-sdk && \
+    curl -L -o sdk.zip https://dl.google.com/android/repository/commandlinetools-linux-6858069_latest.zip && \
+    unzip sdk.zip && rm -f sdk.zip
+
+RUN cd /home/android-sdk/cmdline-tools && mkdir latest && mv * latest/ || true
+
+ENV ANDROID_SDK_ROOT="/home/android-sdk"    \
+    PATH="${PATH}:/home/android-sdk/platform-tools/bin"
+
+RUN cd /home/android-sdk/cmdline-tools/latest/bin/ && \
+    yes | ./sdkmanager --licenses && \
+    ./sdkmanager 'platforms;android-30' 'build-tools;30.0.2'
+
+# create development folders (mount points)
+RUN mkdir -p /home/source           && \
+    mkdir -p /home/build            && \
+    mkdir -p /home/test-data        && \
+    mkdir -p /home/secure-test-data && \
+    chmod --recursive 777 /home
