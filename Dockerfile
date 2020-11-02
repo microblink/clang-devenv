@@ -86,12 +86,13 @@ RUN cd /home/android-sdk/cmdline-tools && mkdir latest && mv * latest/ || true
 ENV ANDROID_SDK_ROOT="/home/android-sdk"    \
     PATH="${PATH}:/home/android-sdk/platform-tools/bin"
 
+# install Android SDK and tools and create development folders (mount points)
+# note: this is a single run statement to prevent having two large docker layers when pushing
+#       (one containing the android SDK and another containing the chmod-ed SDK)
 RUN cd /home/android-sdk/cmdline-tools/latest/bin/ && \
     yes | ./sdkmanager --licenses && \
-    ./sdkmanager 'platforms;android-30' 'build-tools;30.0.2'
-
-# create development folders (mount points)
-RUN mkdir -p /home/source           && \
+    ./sdkmanager 'platforms;android-30' 'build-tools;30.0.2' 'platforms;android-29' 'build-tools;29.0.2' && \
+    mkdir -p /home/source           && \
     mkdir -p /home/build            && \
     mkdir -p /home/test-data        && \
     mkdir -p /home/secure-test-data && \
