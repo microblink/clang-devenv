@@ -45,7 +45,7 @@ RUN ln -s /usr/local/bin/clang /usr/bin/clang && \
     ln /usr/local/bin/llvm-ranlib /usr/bin/ranlib && \
     ln -s /usr/local/bin/ccache /usr/bin/ccache
 
-ARG CMAKE_VERSION=3.18.4
+ARG CMAKE_VERSION=3.19.1
 
 # download and install CMake
 RUN cd /home && \
@@ -57,7 +57,7 @@ RUN cd /home && \
     cd .. && \
     rm -rf *
 
-ARG CONAN_VERSION=1.30.2
+ARG CONAN_VERSION=1.31.4
 
 # download and install conan and LFS and set global .gitignore
 RUN python3 -m pip install conan==${CONAN_VERSION} grip
