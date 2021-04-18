@@ -3,7 +3,7 @@ FROM microblinkdev/centos-ccache:3.7.11 as ccache
 FROM microblinkdev/centos-git:2.30.0 as git
 FROM microblinkdev/centos-python:3.8.3 as python
 
-FROM microblinkdev/centos-clang:9.0.1
+FROM microblinkdev/centos-clang:12.0.0
 
 COPY --from=ninja /usr/local/bin/ninja /usr/local/bin/
 COPY --from=python /usr/local /usr/local/
@@ -45,7 +45,7 @@ RUN ln -s /usr/local/bin/clang /usr/bin/clang && \
     ln /usr/local/bin/llvm-ranlib /usr/bin/ranlib && \
     ln -s /usr/local/bin/ccache /usr/bin/ccache
 
-ARG CMAKE_VERSION=3.19.3
+ARG CMAKE_VERSION=3.19.8
 
 # download and install CMake
 RUN cd /home && \
