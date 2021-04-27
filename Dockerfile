@@ -1,7 +1,7 @@
 FROM microblinkdev/centos-ninja:1.10.2 as ninja
 FROM microblinkdev/centos-ccache:3.7.11 as ccache
 FROM microblinkdev/centos-git:2.30.0 as git
-FROM microblinkdev/centos-python:3.8.0 as python
+FROM microblinkdev/centos-python:3.8.3 as python
 
 FROM microblinkdev/centos-clang:9.0.1
 
