@@ -49,9 +49,9 @@ ARG CMAKE_VERSION=3.20.5
 
 # download and install CMake
 RUN cd /home && \
-    curl -o cmake.tar.gz -L https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz && \
+    curl -o cmake.tar.gz -L https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.tar.gz && \
     tar xf cmake.tar.gz && \
-    cd cmake-${CMAKE_VERSION}-Linux-x86_64 && \
+    cd cmake-${CMAKE_VERSION}-linux-x86_64 && \
     find . -type d -exec mkdir -p /usr/local/\{} \; && \
     find . -type f -exec mv \{} /usr/local/\{} \; && \
     cd .. && \
