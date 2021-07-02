@@ -13,7 +13,7 @@ COPY --from=ccache /usr/local /usr/local/
 # install LFS and setup global .gitignore for both
 # root and every other user logged with -u user:group docker run parameter
 RUN yum -y install epel-release && \
-    yum -y install openssh-clients glibc-static java-devel which gtk3-devel zip bzip2 make gdb libXt perl-Digest-MD5 libjpeg-devel openssl11-devel && \
+    yum -y install openssh-clients glibc-static java-devel which gtk3-devel zip bzip2 make gdb libXt perl-Digest-MD5 libjpeg-devel openssl11-devel libatomic && \
     git lfs install && \
     echo "~*" >> /.gitignore_global && \
     echo ".DS_Store" >> /.gitignore_global && \
@@ -45,7 +45,7 @@ RUN ln -s /usr/local/bin/clang /usr/bin/clang && \
     ln /usr/local/bin/llvm-ranlib /usr/bin/ranlib && \
     ln -s /usr/local/bin/ccache /usr/bin/ccache
 
-ARG CMAKE_VERSION=3.19.3
+ARG CMAKE_VERSION=3.20.5
 
 # download and install CMake
 RUN cd /home && \
@@ -57,7 +57,7 @@ RUN cd /home && \
     cd .. && \
     rm -rf *
 
-ARG CONAN_VERSION=1.37.2
+ARG CONAN_VERSION=1.38.0
 
 # download and install conan and LFS and set global .gitignore
 RUN python3 -m pip install conan==${CONAN_VERSION} grip
