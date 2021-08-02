@@ -3,7 +3,7 @@ FROM microblinkdev/centos-ccache:3.7.11 as ccache
 FROM microblinkdev/centos-git:2.30.0 as git
 FROM microblinkdev/centos-python:3.8.3 as python
 
-FROM microblinkdev/centos-clang:9.0.1
+FROM microblinkdev/centos-clang:12.0.1
 
 COPY --from=ninja /usr/local/bin/ninja /usr/local/bin/
 COPY --from=python /usr/local /usr/local/
@@ -13,7 +13,7 @@ COPY --from=ccache /usr/local /usr/local/
 # install LFS and setup global .gitignore for both
 # root and every other user logged with -u user:group docker run parameter
 RUN yum -y install epel-release && \
-    yum -y install openssh-clients glibc-static java-devel which gtk3-devel zip bzip2 make gdb libXt perl-Digest-MD5 libjpeg-devel openssl11-devel libatomic && \
+    yum -y install openssh-clients glibc-static java-11-devel which gtk3-devel zip bzip2 make gdb libXt perl-Digest-MD5 libjpeg-devel openssl11-devel libatomic && \
     git lfs install && \
     echo "~*" >> /.gitignore_global && \
     echo ".DS_Store" >> /.gitignore_global && \
@@ -45,7 +45,7 @@ RUN ln -s /usr/local/bin/clang /usr/bin/clang && \
     ln /usr/local/bin/llvm-ranlib /usr/bin/ranlib && \
     ln -s /usr/local/bin/ccache /usr/bin/ccache
 
-ARG CMAKE_VERSION=3.20.5
+ARG CMAKE_VERSION=3.21.1
 
 # download and install CMake
 RUN cd /home && \
@@ -57,7 +57,7 @@ RUN cd /home && \
     cd .. && \
     rm -rf *
 
-ARG CONAN_VERSION=1.38.0
+ARG CONAN_VERSION=1.39.0
 
 # download and install conan and LFS and set global .gitignore
 RUN python3 -m pip install conan==${CONAN_VERSION} grip
@@ -91,7 +91,7 @@ ENV ANDROID_SDK_ROOT="/home/android-sdk"    \
 #       (one containing the android SDK and another containing the chmod-ed SDK)
 RUN cd /home/android-sdk/cmdline-tools/latest/bin/ && \
     yes | ./sdkmanager --licenses && \
-    ./sdkmanager 'platforms;android-30' 'build-tools;30.0.2' 'platforms;android-29' 'build-tools;29.0.2' && \
+    ./sdkmanager 'platforms;android-30' 'build-tools;30.0.3' 'platforms;android-29' 'build-tools;29.0.3' && \
     mkdir -p /home/source           && \
     mkdir -p /home/build            && \
     mkdir -p /home/test-data        && \
