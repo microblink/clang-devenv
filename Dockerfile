@@ -84,7 +84,7 @@ RUN yum -y install unzip && \
 RUN cd /home/android-sdk/cmdline-tools && mkdir latest && mv * latest/ || true
 
 ENV ANDROID_SDK_ROOT="/home/android-sdk"    \
-    PATH="${PATH}:/home/android-sdk/platform-tools"
+    PATH="${PATH}:/home/android-sdk/platform-tools:/home/android-sdk/cmdline-tools/latest/bin"
 
 # install Android SDK and tools and create development folders (mount points)
 # note: this is a single run statement to prevent having two large docker layers when pushing
