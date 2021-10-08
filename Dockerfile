@@ -1,19 +1,20 @@
 FROM microblinkdev/centos-ninja:1.10.2 as ninja
 FROM microblinkdev/centos-ccache:3.7.11 as ccache
 FROM microblinkdev/centos-git:2.30.0 as git
-FROM microblinkdev/centos-python:3.8.3 as python
 
-FROM microblinkdev/centos-clang:12.0.1
+# Amazon Linux 2 uses python3.7 by default and LLDB is built against it
+# FROM microblinkdev/centos-python:3.8.3 as python
+
+FROM microblinkdev/amazonlinux-clang:13.0.0
 
 COPY --from=ninja /usr/local/bin/ninja /usr/local/bin/
-COPY --from=python /usr/local /usr/local/
+# COPY --from=python /usr/local /usr/local/
 COPY --from=git /usr/local /usr/local/
 COPY --from=ccache /usr/local /usr/local/
 
 # install LFS and setup global .gitignore for both
 # root and every other user logged with -u user:group docker run parameter
-RUN yum -y install epel-release && \
-    yum -y install openssh-clients glibc-static java-11-devel which gtk3-devel zip bzip2 make gdb libXt perl-Digest-MD5 libjpeg-devel openssl11-devel libatomic && \
+RUN yum -y install openssh-clients java-11-amazon-corretto-headless which gtk3-devel zip bzip2 make gdb libXt perl-Digest-MD5 openssl11-devel && \
     git lfs install && \
     echo "~*" >> /.gitignore_global && \
     echo ".DS_Store" >> /.gitignore_global && \
@@ -28,12 +29,6 @@ RUN yum -y install epel-release && \
     echo "bind \"set completion-ignore-case on\"" >> ~/.bashrc
 
 ENV NINJA_STATUS="[%f/%t %c/sec] "
-# support for conan packages to discover OpenSSL 1.1.1
-ENV CONAN_CMAKE_CUSTOM_OPENSSL_ROOT_DIR=/usr/include/openssl11      \
-    CONAN_CMAKE_CUSTOM_OPENSSL_LIBRARIES=/usr/lib64/openssl11       \
-    CONAN_CMAKE_CUSTOM_OPENSSL_SSL_LIBRARY=/usr/lib64/openssl11     \
-    CONAN_CMAKE_CUSTOM_OPENSSL_CRYPTO_LIBRARY=/usr/lib64/openssl11  \
-    CONAN_CMAKE_CUSTOM_OPENSSL_INCLUDE_DIR=/usr/include/openssl11
 
 # create gcc/g++ symlinks in /usr/bin (compatibility with legacy clang conan profile)
 # and also replace binutils tools with LLVM version
@@ -45,10 +40,11 @@ RUN ln -s /usr/local/bin/clang /usr/bin/clang && \
     ln /usr/local/bin/llvm-ranlib /usr/bin/ranlib && \
     ln -s /usr/local/bin/ccache /usr/bin/ccache
 
-ARG CMAKE_VERSION=3.21.1
+ARG CMAKE_VERSION=3.21.3
 
 # download and install CMake
 RUN cd /home && \
+	yum -y install tar && \
     curl -o cmake.tar.gz -L https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.tar.gz && \
     tar xf cmake.tar.gz && \
     cd cmake-${CMAKE_VERSION}-linux-x86_64 && \
@@ -57,7 +53,7 @@ RUN cd /home && \
     cd .. && \
     rm -rf *
 
-ARG CONAN_VERSION=1.39.0
+ARG CONAN_VERSION=1.41.0
 
 # download and install conan and LFS and set global .gitignore
 RUN python3 -m pip install conan==${CONAN_VERSION} grip
@@ -97,3 +93,9 @@ RUN cd /home/android-sdk/cmdline-tools/latest/bin/ && \
     mkdir -p /home/test-data        && \
     mkdir -p /home/secure-test-data && \
     chmod --recursive 777 /home
+
+# download and install latest chrome
+RUN cd /home && \
+    curl -o chrome.rpm https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
+    yum -y install chrome.rpm && \
+    rm chrome.rpm
