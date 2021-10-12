@@ -14,7 +14,7 @@ COPY --from=ccache /usr/local /usr/local/
 
 # install LFS and setup global .gitignore for both
 # root and every other user logged with -u user:group docker run parameter
-RUN yum -y install openssh-clients java-11-amazon-corretto-headless which gtk3-devel zip bzip2 make gdb libXt perl-Digest-MD5 openssl11-devel && \
+RUN yum -y install openssh-clients java-11-amazon-corretto-headless which gtk3-devel zip bzip2 make gdb libXt perl-Digest-MD5 openssl11-devel tar gzip zip unzip xz && \
     git lfs install && \
     echo "~*" >> /.gitignore_global && \
     echo ".DS_Store" >> /.gitignore_global && \
@@ -44,7 +44,6 @@ ARG CMAKE_VERSION=3.21.3
 
 # download and install CMake
 RUN cd /home && \
-	yum -y install tar && \
     curl -o cmake.tar.gz -L https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.tar.gz && \
     tar xf cmake.tar.gz && \
     cd cmake-${CMAKE_VERSION}-linux-x86_64 && \
@@ -72,8 +71,7 @@ RUN yum -y install perl-JSON && \
     sed -i '1 s/^.*$/#!\/usr\/bin\/perl -0007/' /usr/bin/pp
 
 # Install Android SDK
-RUN yum -y install unzip && \
-    cd /home && mkdir android-sdk && cd android-sdk && \
+RUN cd /home && mkdir android-sdk && cd android-sdk && \
     curl -L -o sdk.zip https://dl.google.com/android/repository/commandlinetools-linux-6858069_latest.zip && \
     unzip sdk.zip && rm -f sdk.zip
 
