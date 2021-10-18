@@ -13,7 +13,7 @@ COPY --from=ccache /usr/local /usr/local/
 # install LFS and setup global .gitignore for both
 # root and every other user logged with -u user:group docker run parameter
 RUN yum -y install epel-release && \
-    yum -y install openssh-clients glibc-static java-devel which gtk3-devel zip bzip2 make gdb libXt perl-Digest-MD5 libjpeg-devel openssl11-devel && \
+    yum -y install openssh-clients glibc-static java-11-devel which gtk3-devel zip bzip2 make gdb libXt perl-Digest-MD5 libjpeg-devel openssl11-devel libatomic && \
     git lfs install && \
     echo "~*" >> /.gitignore_global && \
     echo ".DS_Store" >> /.gitignore_global && \
@@ -46,10 +46,11 @@ RUN ln -s /usr/local/bin/clang /usr/bin/clang && \
     ln -s /usr/local/bin/ccache /usr/bin/ccache
 
 ARG CMAKE_VERSION=3.21.3
+ARG CMAKE_VERSION=3.21.1
 
 # download and install CMake
 RUN cd /home && \
-    curl -o cmake.tar.gz -L https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz && \
+    curl -o cmake.tar.gz -L https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.tar.gz && \
     tar xf cmake.tar.gz && \
     cd cmake-${CMAKE_VERSION}-linux-x86_64 && \
     find . -type d -exec mkdir -p /usr/local/\{} \; && \
@@ -84,14 +85,14 @@ RUN yum -y install unzip && \
 RUN cd /home/android-sdk/cmdline-tools && mkdir latest && mv * latest/ || true
 
 ENV ANDROID_SDK_ROOT="/home/android-sdk"    \
-    PATH="${PATH}:/home/android-sdk/platform-tools"
+    PATH="${PATH}:/home/android-sdk/platform-tools:/home/android-sdk/cmdline-tools/latest/bin"
 
 # install Android SDK and tools and create development folders (mount points)
 # note: this is a single run statement to prevent having two large docker layers when pushing
 #       (one containing the android SDK and another containing the chmod-ed SDK)
 RUN cd /home/android-sdk/cmdline-tools/latest/bin/ && \
     yes | ./sdkmanager --licenses && \
-    ./sdkmanager 'platforms;android-30' 'build-tools;30.0.2' 'platforms;android-29' 'build-tools;29.0.2' && \
+    ./sdkmanager 'platforms;android-30' 'build-tools;30.0.3' 'platforms;android-29' 'build-tools;29.0.3' && \
     mkdir -p /home/source           && \
     mkdir -p /home/build            && \
     mkdir -p /home/test-data        && \
