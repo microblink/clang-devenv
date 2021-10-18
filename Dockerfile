@@ -45,19 +45,19 @@ RUN ln -s /usr/local/bin/clang /usr/bin/clang && \
     ln /usr/local/bin/llvm-ranlib /usr/bin/ranlib && \
     ln -s /usr/local/bin/ccache /usr/bin/ccache
 
-ARG CMAKE_VERSION=3.19.8
+ARG CMAKE_VERSION=3.21.3
 
 # download and install CMake
 RUN cd /home && \
     curl -o cmake.tar.gz -L https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz && \
     tar xf cmake.tar.gz && \
-    cd cmake-${CMAKE_VERSION}-Linux-x86_64 && \
+    cd cmake-${CMAKE_VERSION}-linux-x86_64 && \
     find . -type d -exec mkdir -p /usr/local/\{} \; && \
     find . -type f -exec mv \{} /usr/local/\{} \; && \
     cd .. && \
     rm -rf *
 
-ARG CONAN_VERSION=1.37.2
+ARG CONAN_VERSION=1.41.0
 
 # download and install conan and LFS and set global .gitignore
 RUN python3 -m pip install conan==${CONAN_VERSION} grip
