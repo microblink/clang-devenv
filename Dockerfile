@@ -97,3 +97,19 @@ RUN cd /home && \
     curl -o chrome.rpm https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
     yum -y install chrome.rpm && \
     rm chrome.rpm
+
+# download and install latest epiphany browser (webkit-based browser for Safari simulation)
+RUN yum -y install flatpak xorg-x11-server-Xvfb dbus-x11
+
+RUN flatpak remote-add flathub https://flathub.org/repo/flathub.flatpakrepo
+
+RUN flatpak install -y flathub org.gnome.Epiphany
+
+# make epiphany launcher (emrun cannot execute shell scripts)
+
+ADD epiphany-launcher.cpp /home/epiphany-launcher/
+
+RUN cd /home/epiphany-launcher && \
+    clang++ -o epiphany epiphany-launcher.cpp -std=c++20 && \
+    mv epiphany /usr/local/bin/epiphany && \
+    cd /home && rm -rf epiphany-launcher
