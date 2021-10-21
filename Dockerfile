@@ -99,7 +99,7 @@ RUN cd /home && \
     rm chrome.rpm
 
 # download and install latest epiphany browser (webkit-based browser for Safari simulation)
-RUN yum -y install flatpak xorg-x11-server-Xvfb dbus-x11
+RUN yum -y install flatpak xorg-x11-server-Xvfb dbus-x11 psmisc procps
 
 RUN flatpak remote-add flathub https://flathub.org/repo/flathub.flatpakrepo
 
