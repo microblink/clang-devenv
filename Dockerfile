@@ -40,7 +40,7 @@ RUN ln -s /usr/local/bin/clang /usr/bin/clang && \
     ln /usr/local/bin/llvm-ranlib /usr/bin/ranlib && \
     ln -s /usr/local/bin/ccache /usr/bin/ccache
 
-ARG CMAKE_VERSION=3.21.3
+ARG CMAKE_VERSION=3.21.4
 
 # download and install CMake
 RUN cd /home && \
@@ -52,7 +52,21 @@ RUN cd /home && \
     cd .. && \
     rm -rf *
 
-ARG CONAN_VERSION=1.41.0
+ARG WABT_VERSION=1.0.24
+
+# download and install WASM binary tools, used for wasm validation
+RUN cd /home && \
+    curl -o wabt.tar.xz -L https://github.com/WebAssembly/wabt/releases/download/${WABT_VERSION}/wabt-${WABT_VERSION}.tar.xz && \
+    tar xf wabt.tar.xz && \
+    mkdir wabt-build && \
+    cd wabt-build && \
+    cmake -GNinja -DCMAKE_INSTALL_PREFIX=/usr/local ../wabt-${WABT_VERSION} && \
+    ninja && \
+    ninja install && \
+    cd .. && \
+    rm -rf *
+
+ARG CONAN_VERSION=1.42.0
 
 # download and install conan, grip and virtualenv (pythong packages needed for build)
 RUN python3 -m pip install conan==${CONAN_VERSION} grip virtualenv
@@ -64,6 +78,7 @@ RUN cd /tmp/ && \
     curl -L http://github.com/micha/jsawk/raw/master/jsawk > jsawk && \
     chmod 755 jsawk && mv jsawk /usr/bin/ && \
     yum install -y js
+
 # Install restry
 RUN yum -y install perl-JSON && \
     curl -L https://raw.githubusercontent.com/micha/resty/master/pp > /usr/bin/pp && \
@@ -85,7 +100,7 @@ ENV ANDROID_SDK_ROOT="/home/android-sdk"    \
 #       (one containing the android SDK and another containing the chmod-ed SDK)
 RUN cd /home/android-sdk/cmdline-tools/latest/bin/ && \
     yes | ./sdkmanager --licenses && \
-    ./sdkmanager 'platforms;android-30' 'build-tools;30.0.3' 'platforms;android-29' 'build-tools;29.0.3' && \
+    ./sdkmanager 'platforms;android-31' 'build-tools;31.0.0' 'platforms;android-30' 'build-tools;30.0.3' && \
     mkdir -p /home/source           && \
     mkdir -p /home/build            && \
     mkdir -p /home/test-data        && \
@@ -97,19 +112,3 @@ RUN cd /home && \
     curl -o chrome.rpm https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
     yum -y install chrome.rpm && \
     rm chrome.rpm
-
-# download and install latest epiphany browser (webkit-based browser for Safari simulation)
-RUN yum -y install flatpak xorg-x11-server-Xvfb dbus-x11 psmisc procps
-
-RUN flatpak remote-add flathub https://flathub.org/repo/flathub.flatpakrepo
-
-RUN flatpak install -y flathub org.gnome.Epiphany
-
-# make epiphany launcher (emrun cannot execute shell scripts)
-
-ADD epiphany-launcher.cpp /home/epiphany-launcher/
-
-RUN cd /home/epiphany-launcher && \
-    clang++ -o epiphany epiphany-launcher.cpp -std=c++20 && \
-    mv epiphany /usr/local/bin/epiphany && \
-    cd /home && rm -rf epiphany-launcher
