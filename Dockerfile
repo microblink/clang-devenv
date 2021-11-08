@@ -71,7 +71,7 @@ ARG CONAN_VERSION=1.42.0
 # download and install conan, grip and virtualenv (pythong packages needed for build)
 RUN python3 -m pip install conan==${CONAN_VERSION} grip virtualenv
 
-ENV LD_LIBRARY_PATH="/usr/local/lib:/usr/local/lib64"
+ENV LD_LIBRARY_PATH=
 
 # Install jsawk
 RUN cd /tmp/ && \
