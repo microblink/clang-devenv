@@ -35,9 +35,9 @@ ENV NINJA_STATUS="[%f/%t %c/sec] "
 RUN ln -s /usr/local/bin/clang /usr/bin/clang && \
     ln -s /usr/local/bin/clang++ /usr/bin/clang++ && \
     rm /usr/bin/nm /usr/bin/ranlib /usr/bin/ar && \
-    ln /usr/local/bin/llvm-ar /usr/bin/ar && \
-    ln /usr/local/bin/llvm-nm /usr/bin/nm && \
-    ln /usr/local/bin/llvm-ranlib /usr/bin/ranlib && \
+    ln -s /usr/local/bin/llvm-ar /usr/bin/ar && \
+    ln -s /usr/local/bin/llvm-nm /usr/bin/nm && \
+    ln -s /usr/local/bin/llvm-ranlib /usr/bin/ranlib && \
     ln -s /usr/local/bin/ccache /usr/bin/ccache
 
 ARG CMAKE_VERSION=3.21.4
