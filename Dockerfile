@@ -60,7 +60,7 @@ RUN cd /home && \
     tar xf wabt.tar.xz && \
     mkdir wabt-build && \
     cd wabt-build && \
-    cmake -GNinja -DCMAKE_INSTALL_PREFIX=/usr/local ../wabt-${WABT_VERSION} && \
+    cmake -GNinja -DCMAKE_INSTALL_RPATH=/usr/local/lib -DCMAKE_INSTALL_PREFIX=/usr/local ../wabt-${WABT_VERSION} && \
     ninja && \
     ninja install && \
     cd .. && \
