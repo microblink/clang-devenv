@@ -3,7 +3,7 @@ FROM microblinkdev/centos-ccache:3.7.11 as ccache
 FROM microblinkdev/centos-git:2.30.0 as git
 FROM microblinkdev/centos-python:3.8.3 as python
 
-FROM microblinkdev/centos-clang:12.0.0
+FROM microblinkdev/centos-clang:12.0.1
 
 COPY --from=ninja /usr/local/bin/ninja /usr/local/bin/
 COPY --from=python /usr/local /usr/local/
@@ -45,8 +45,7 @@ RUN ln -s /usr/local/bin/clang /usr/bin/clang && \
     ln /usr/local/bin/llvm-ranlib /usr/bin/ranlib && \
     ln -s /usr/local/bin/ccache /usr/bin/ccache
 
-ARG CMAKE_VERSION=3.21.3
-ARG CMAKE_VERSION=3.21.1
+ARG CMAKE_VERSION=3.22.1
 
 # download and install CMake
 RUN cd /home && \
@@ -58,7 +57,7 @@ RUN cd /home && \
     cd .. && \
     rm -rf *
 
-ARG CONAN_VERSION=1.41.0
+ARG CONAN_VERSION=1.44.1
 
 # download and install conan and LFS and set global .gitignore
 RUN python3 -m pip install conan==${CONAN_VERSION} grip
