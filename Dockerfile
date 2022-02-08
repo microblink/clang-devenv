@@ -68,11 +68,10 @@ ARG WABT_VERSION=1.0.25
 # download and install WASM binary tools, used for wasm validation
 RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
         cd /home && \
-        curl -o wabt.tar.xz -L https://github.com/WebAssembly/wabt/releases/download/${WABT_VERSION}/wabt-${WABT_VERSION}.tar.xz && \
-        tar xf wabt.tar.xz && \
+        git clone --depth 1 --shallow-submodules --branch ${WABT_VERSION} --recursive  https://github.com/WebAssembly/wabt && \
         mkdir wabt-build && \
         cd wabt-build && \
-        cmake -GNinja -DCMAKE_INSTALL_RPATH=/usr/local/lib -DCMAKE_INSTALL_PREFIX=/usr/local ../wabt-${WABT_VERSION} && \
+        cmake -GNinja -DCMAKE_INSTALL_RPATH=/usr/local/lib -DCMAKE_INSTALL_PREFIX=/usr/local ../wabt && \
         ninja && \
         ninja install && \
         cd .. && \
