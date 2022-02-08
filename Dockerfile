@@ -1,11 +1,11 @@
 FROM microblinkdev/amazonlinux-ninja:1.10.2 as ninja
 FROM microblinkdev/amazonlinux-ccache:4.5.1 as ccache
-FROM microblinkdev/amazonlinux-git:2.34.1 as git
+FROM microblinkdev/amazonlinux-git:2.35.1 as git
 
 # Amazon Linux 2 uses python3.7 by default and LLDB is built against it
 # FROM microblinkdev/centos-python:3.8.3 as python
 
-FROM microblinkdev/amazonlinux-clang:13.0.0
+FROM microblinkdev/amazonlinux-clang:13.0.1
 
 COPY --from=ninja /usr/local/bin/ninja /usr/local/bin/
 # COPY --from=python /usr/local /usr/local/
@@ -40,7 +40,7 @@ RUN ln -s /usr/local/bin/clang /usr/bin/clang && \
     ln -s /usr/local/bin/llvm-ranlib /usr/bin/ranlib && \
     ln -s /usr/local/bin/ccache /usr/bin/ccache
 
-ARG CMAKE_VERSION=3.22.1
+ARG CMAKE_VERSION=3.22.2
 ARG BUILDPLATFORM
 
 # download and install CMake
@@ -54,7 +54,7 @@ RUN cd /home && \
     cd .. && \
     rm -rf *
 
-ARG CONAN_VERSION=1.43.2
+ARG CONAN_VERSION=1.45.0
 
 # download and install conan, grip and virtualenv (pythong packages needed for build)
 RUN python3 -m pip install conan==${CONAN_VERSION} grip virtualenv
@@ -63,7 +63,7 @@ RUN python3 -m pip install conan==${CONAN_VERSION} grip virtualenv
 # everything below this line is Intel-only #
 ############################################
 
-ARG WABT_VERSION=1.0.24
+ARG WABT_VERSION=1.0.25
 
 # download and install WASM binary tools, used for wasm validation
 RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
