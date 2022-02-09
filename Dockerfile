@@ -63,7 +63,7 @@ RUN python3 -m pip install conan==${CONAN_VERSION} grip virtualenv
 # everything below this line is Intel-only #
 ############################################
 
-ARG WABT_VERSION=1.0.25
+ARG WABT_VERSION=1.0.26
 
 # download and install WASM binary tools, used for wasm validation
 RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
