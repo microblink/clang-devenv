@@ -5,7 +5,7 @@ FROM microblinkdev/amazonlinux-git:2.35.1 as git
 # Amazon Linux 2 uses python3.7 by default and LLDB is built against it
 # FROM microblinkdev/centos-python:3.8.3 as python
 
-FROM microblinkdev/amazonlinux-clang:13.0.1
+FROM microblinkdev/amazonlinux-clang:13.0.0
 
 COPY --from=ninja /usr/local/bin/ninja /usr/local/bin/
 # COPY --from=python /usr/local /usr/local/
