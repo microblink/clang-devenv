@@ -5,7 +5,7 @@ FROM microblinkdev/amazonlinux-git:2.35.1 as git
 # Amazon Linux 2 uses python3.7 by default and LLDB is built against it
 # FROM microblinkdev/centos-python:3.8.3 as python
 
-FROM microblinkdev/amazonlinux-clang:13.0.1
+FROM microblinkdev/amazonlinux-clang:14.0.0
 
 COPY --from=ninja /usr/local/bin/ninja /usr/local/bin/
 # COPY --from=python /usr/local /usr/local/
@@ -40,7 +40,7 @@ RUN ln -s /usr/local/bin/clang /usr/bin/clang && \
     ln -s /usr/local/bin/llvm-ranlib /usr/bin/ranlib && \
     ln -s /usr/local/bin/ccache /usr/bin/ccache
 
-ARG CMAKE_VERSION=3.22.2
+ARG CMAKE_VERSION=3.22.3
 ARG BUILDPLATFORM
 
 # download and install CMake
@@ -54,7 +54,7 @@ RUN cd /home && \
     cd .. && \
     rm -rf *
 
-ARG CONAN_VERSION=1.45.0
+ARG CONAN_VERSION=1.46.2
 
 # download and install conan, grip and virtualenv (pythong packages needed for build)
 RUN python3 -m pip install conan==${CONAN_VERSION} grip virtualenv
