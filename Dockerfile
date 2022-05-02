@@ -9,7 +9,7 @@ FROM microblinkdev/amazonlinux-git:2.35.1 as git
 # NOTE: don't forget to also update `latest` tag
 #       regctl image copy microblinkdev/clang-devenv:14.0.2 microblinkdev/clang-devenv:latest
 ##------------------------------------------------------------------------------
-FROM microblinkdev/amazonlinux-clang:14.0.2
+FROM microblinkdev/amazonlinux-clang:14.0.3
 
 COPY --from=ninja /usr/local/bin/ninja /usr/local/bin/
 # COPY --from=python /usr/local /usr/local/
