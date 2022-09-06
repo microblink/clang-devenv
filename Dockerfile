@@ -1,4 +1,4 @@
-FROM microblinkdev/amazonlinux-ninja:1.11.0 as ninja
+FROM microblinkdev/amazonlinux-ninja:1.11.1 as ninja
 FROM microblinkdev/amazonlinux-ccache:4.5.1 as ccache
 FROM microblinkdev/amazonlinux-git:2.35.1 as git
 
@@ -11,7 +11,7 @@ FROM microblinkdev/amazonlinux-git:2.35.1 as git
 # NOTE: don't forget to also update `latest` tag
 #       regctl image copy microblinkdev/clang-devenv:14.0.2 microblinkdev/clang-devenv:latest
 ##------------------------------------------------------------------------------
-FROM microblinkdev/amazonlinux-clang:14.0.6
+FROM microblinkdev/amazonlinux-clang:15.0.0
 
 COPY --from=ninja /usr/local/bin/ninja /usr/local/bin/
 COPY --from=git /usr/local /usr/local/
@@ -59,7 +59,7 @@ RUN cd /home && \
     cd .. && \
     rm -rf *
 
-ARG CONAN_VERSION=1.51.3
+ARG CONAN_VERSION=1.52.0
 
 # download and install conan, grip and virtualenv (pythong packages needed for build)
 RUN python3 -m pip install conan==${CONAN_VERSION} grip virtualenv
