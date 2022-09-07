@@ -76,7 +76,7 @@ RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
         git clone --depth 1 --shallow-submodules --branch ${WABT_VERSION} --recursive  https://github.com/WebAssembly/wabt && \
         mkdir wabt-build && \
         cd wabt-build && \
-        cmake -GNinja -DCMAKE_INSTALL_RPATH=/usr/local/lib -DCMAKE_INSTALL_PREFIX=/usr/local ../wabt && \
+        cmake -GNinja -DCMAKE_INSTALL_RPATH="/usr/local/lib/x86_64-unknown-linux-gnu;/usr/local/lib" -DCMAKE_INSTALL_PREFIX=/usr/local ../wabt && \
         ninja && \
         ninja install && \
         cd .. && \
