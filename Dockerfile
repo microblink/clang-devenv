@@ -11,7 +11,7 @@ FROM microblinkdev/amazonlinux-git:2.35.1 as git
 # NOTE: don't forget to also update `latest` tag
 #       regctl image copy microblinkdev/clang-devenv:14.0.2 microblinkdev/clang-devenv:latest
 ##------------------------------------------------------------------------------
-FROM microblinkdev/amazonlinux-clang:15.0.0
+FROM microblinkdev/amazonlinux-clang:15.0.1
 
 COPY --from=ninja /usr/local/bin/ninja /usr/local/bin/
 COPY --from=git /usr/local /usr/local/
@@ -45,7 +45,7 @@ RUN ln -s /usr/local/bin/clang /usr/bin/clang && \
     ln -s /usr/local/bin/llvm-ranlib /usr/bin/ranlib && \
     ln -s /usr/local/bin/ccache /usr/bin/ccache
 
-ARG CMAKE_VERSION=3.24.1
+ARG CMAKE_VERSION=3.24.2
 ARG BUILDPLATFORM
 
 # download and install CMake
