@@ -1,6 +1,6 @@
 FROM microblinkdev/amazonlinux-ninja:1.11.1 as ninja
 FROM microblinkdev/amazonlinux-ccache:4.5.1 as ccache
-FROM microblinkdev/amazonlinux-git:2.35.1 as git
+FROM microblinkdev/amazonlinux-git:2.38.0 as git
 
 # Amazon Linux 2 uses python3.7 by default
 # As of amazonlinux-clang:14.0.4, it ships with it's own latest python (3.10 for LLVM 14.0.4)
@@ -11,7 +11,7 @@ FROM microblinkdev/amazonlinux-git:2.35.1 as git
 # NOTE: don't forget to also update `latest` tag
 #       regctl image copy microblinkdev/clang-devenv:14.0.2 microblinkdev/clang-devenv:latest
 ##------------------------------------------------------------------------------
-FROM microblinkdev/amazonlinux-clang:15.0.2
+FROM microblinkdev/amazonlinux-clang:15.0.3
 
 COPY --from=ninja /usr/local/bin/ninja /usr/local/bin/
 COPY --from=git /usr/local /usr/local/
@@ -59,7 +59,7 @@ RUN cd /home && \
     cd .. && \
     rm -rf *
 
-ARG CONAN_VERSION=1.52.0
+ARG CONAN_VERSION=1.53.0
 
 # download and install conan, grip and virtualenv (pythong packages needed for build)
 RUN python3 -m pip install conan==${CONAN_VERSION} grip virtualenv
