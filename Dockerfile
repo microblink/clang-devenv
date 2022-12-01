@@ -1,6 +1,6 @@
-FROM microblinkdev/amazonlinux-ninja:1.11.1 as ninja
-FROM microblinkdev/amazonlinux-ccache:4.5.1 as ccache
-FROM microblinkdev/amazonlinux-git:2.38.0 as git
+FROM microblinkdev/amazonlinux-ninja:1.11.1-al2022 as ninja
+FROM microblinkdev/amazonlinux-ccache:4.7.4 as ccache
+FROM microblinkdev/amazonlinux-git:2.38.1 as git
 
 # Amazon Linux 2 uses python3.7 by default
 # As of amazonlinux-clang:14.0.4, it ships with it's own latest python (3.10 for LLVM 14.0.4)
@@ -11,7 +11,7 @@ FROM microblinkdev/amazonlinux-git:2.38.0 as git
 # NOTE: don't forget to also update `latest` tag
 #       regctl image copy microblinkdev/clang-devenv:14.0.2 microblinkdev/clang-devenv:latest
 ##------------------------------------------------------------------------------
-FROM microblinkdev/amazonlinux-clang:15.0.5
+FROM microblinkdev/amazonlinux-clang:15.0.6
 
 COPY --from=ninja /usr/local/bin/ninja /usr/local/bin/
 COPY --from=git /usr/local /usr/local/
@@ -19,7 +19,7 @@ COPY --from=ccache /usr/local /usr/local/
 
 # install LFS and setup global .gitignore for both
 # root and every other user logged with -u user:group docker run parameter
-RUN yum -y install openssh-clients which gtk3-devel zip bzip2 make gdb libXt perl-Digest-MD5 openssl11-devel tar gzip zip unzip xz procps && \
+RUN yum -y install openssh-clients which gtk3-devel zip bzip2 make gdb libXt perl-Digest-MD5 openssl-devel tar gzip zip unzip xz procps && \
     git lfs install && \
     echo "~*" >> /.gitignore_global && \
     echo ".DS_Store" >> /.gitignore_global && \
@@ -45,7 +45,7 @@ RUN ln -s /usr/local/bin/clang /usr/bin/clang && \
     ln -s /usr/local/bin/llvm-ranlib /usr/bin/ranlib && \
     ln -s /usr/local/bin/ccache /usr/bin/ccache
 
-ARG CMAKE_VERSION=3.25.0
+ARG CMAKE_VERSION=3.25.1
 ARG BUILDPLATFORM
 
 # download and install CMake
@@ -59,7 +59,7 @@ RUN cd /home && \
     cd .. && \
     rm -rf *
 
-ARG CONAN_VERSION=1.54.0
+ARG CONAN_VERSION=1.55.0
 
 # download and install conan, grip and virtualenv (pythong packages needed for build)
 RUN python3 -m pip install conan==${CONAN_VERSION} grip virtualenv
@@ -68,7 +68,7 @@ RUN python3 -m pip install conan==${CONAN_VERSION} grip virtualenv
 # everything below this line is Intel-only #
 ############################################
 
-ARG WABT_VERSION=1.0.28
+ARG WABT_VERSION=1.0.31
 
 # download and install WASM binary tools, used for wasm validation
 RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
