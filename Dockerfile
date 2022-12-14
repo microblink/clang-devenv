@@ -116,3 +116,7 @@ RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
         yum -y install chrome.rpm && \
         rm chrome.rpm; \
     fi
+
+# Set location of GCC libs in AmazonLinux 2022
+ENV LIBRARY_PATH="/usr/lib/gcc/aarch64-amazon-linux/11:/usr/lib/gcc/x86_64-amazon-linux/11"
+
