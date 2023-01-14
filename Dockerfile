@@ -11,7 +11,7 @@ FROM microblinkdev/amazonlinux-git:2.38.1 as git
 # NOTE: don't forget to also update `latest` tag
 #       regctl image copy microblinkdev/clang-devenv:14.0.2 microblinkdev/clang-devenv:latest
 ##------------------------------------------------------------------------------
-FROM microblinkdev/amazonlinux-clang:15.0.6
+FROM microblinkdev/amazonlinux-clang:15.0.7
 
 COPY --from=ninja /usr/local/bin/ninja /usr/local/bin/
 COPY --from=git /usr/local /usr/local/
@@ -59,7 +59,7 @@ RUN cd /home && \
     cd .. && \
     rm -rf *
 
-ARG CONAN_VERSION=1.56.0
+ARG CONAN_VERSION=1.57.0
 
 # download and install conan, grip and virtualenv (pythong packages needed for build)
 RUN python3 -m pip install conan==${CONAN_VERSION} grip virtualenv
