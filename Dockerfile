@@ -95,6 +95,8 @@ RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
 ENV ANDROID_SDK_ROOT="/home/android-sdk"    \
     PATH="${PATH}:/home/android-sdk/platform-tools:/home/android-sdk/cmdline-tools/latest/bin"
 
+ARG UBER_ADB_TOOLS_VERSION=1.0.3
+
 # install Android SDK and tools and create development folders (mount points)
 # note: this is a single run statement to prevent having two large docker layers when pushing
 #       (one containing the android SDK and another containing the chmod-ed SDK)
@@ -106,7 +108,9 @@ RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
         mkdir -p /home/build            && \
         mkdir -p /home/test-data        && \
         mkdir -p /home/secure-test-data && \
-        chmod --recursive 777 /home; \
+        chmod --recursive 777 /home     && \
+        cd /home/android-sdk/           && \
+        curl -L -o uber-adb-tools.jar https://github.com/patrickfav/uber-adb-tools/releases/download/v${UBER_ADB_TOOLS_VERSION}/uber-adb-tools-${UBER_ADB_TOOLS_VERSION}.jar;  \
     fi
 
 # download and install latest chrome
