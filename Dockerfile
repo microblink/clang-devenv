@@ -1,6 +1,5 @@
 FROM microblinkdev/amazonlinux-ninja:1.11.1-al2022 as ninja
-FROM microblinkdev/amazonlinux-ccache:4.7.4 as ccache
-FROM microblinkdev/amazonlinux-git:2.38.1 as git
+FROM microblinkdev/amazonlinux-git:2.40.0 as git
 
 # Amazon Linux 2 uses python3.7 by default
 # As of amazonlinux-clang:14.0.4, it ships with it's own latest python (3.10 for LLVM 14.0.4)
@@ -11,11 +10,10 @@ FROM microblinkdev/amazonlinux-git:2.38.1 as git
 # NOTE: don't forget to also update `latest` tag
 #       regctl image copy microblinkdev/clang-devenv:14.0.2 microblinkdev/clang-devenv:latest
 ##------------------------------------------------------------------------------
-FROM microblinkdev/amazonlinux-clang:15.0.7
+FROM microblinkdev/amazonlinux-clang:16.0.1
 
 COPY --from=ninja /usr/local/bin/ninja /usr/local/bin/
 COPY --from=git /usr/local /usr/local/
-COPY --from=ccache /usr/local /usr/local/
 
 # install LFS and setup global .gitignore for both
 # root and every other user logged with -u user:group docker run parameter
@@ -42,10 +40,9 @@ RUN ln -s /usr/local/bin/clang /usr/bin/clang && \
     rm /usr/bin/nm /usr/bin/ranlib /usr/bin/ar && \
     ln -s /usr/local/bin/llvm-ar /usr/bin/ar && \
     ln -s /usr/local/bin/llvm-nm /usr/bin/nm && \
-    ln -s /usr/local/bin/llvm-ranlib /usr/bin/ranlib && \
-    ln -s /usr/local/bin/ccache /usr/bin/ccache
+    ln -s /usr/local/bin/llvm-ranlib /usr/bin/ranlib
 
-ARG CMAKE_VERSION=3.25.1
+ARG CMAKE_VERSION=3.26.3
 ARG BUILDPLATFORM
 
 # download and install CMake
@@ -59,7 +56,7 @@ RUN cd /home && \
     cd .. && \
     rm -rf *
 
-ARG CONAN_VERSION=1.57.0
+ARG CONAN_VERSION=1.59.0
 
 # download and install conan, grip and virtualenv (pythong packages needed for build)
 RUN python3 -m pip install conan==${CONAN_VERSION} grip virtualenv
@@ -68,7 +65,7 @@ RUN python3 -m pip install conan==${CONAN_VERSION} grip virtualenv
 # everything below this line is Intel-only #
 ############################################
 
-ARG WABT_VERSION=1.0.31
+ARG WABT_VERSION=1.0.32
 
 # download and install WASM binary tools, used for wasm validation
 RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
@@ -103,7 +100,7 @@ ARG UBER_ADB_TOOLS_VERSION=1.0.3
 RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
         cd /home/android-sdk/cmdline-tools/latest/bin/ && \
         yes | ./sdkmanager --licenses && \
-        ./sdkmanager 'platforms;android-31' 'build-tools;31.0.0' 'platforms;android-30' 'build-tools;30.0.3' && \
+        ./sdkmanager 'platforms;android-33' 'build-tools;33.0.2' 'platforms;android-32' 'build-tools;32.0.0' && \
         mkdir -p /home/source           && \
         mkdir -p /home/build            && \
         mkdir -p /home/test-data        && \
