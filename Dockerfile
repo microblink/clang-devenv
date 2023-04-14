@@ -92,7 +92,7 @@ RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
 ENV ANDROID_SDK_ROOT="/home/android-sdk"    \
     PATH="${PATH}:/home/android-sdk/platform-tools:/home/android-sdk/cmdline-tools/latest/bin"
 
-ARG UBER_ADB_TOOLS_VERSION=1.0.3
+ARG UBER_ADB_TOOLS_VERSION=1.0.4
 
 # install Android SDK and tools and create development folders (mount points)
 # note: this is a single run statement to prevent having two large docker layers when pushing
