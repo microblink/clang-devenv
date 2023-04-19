@@ -10,7 +10,7 @@ FROM microblinkdev/amazonlinux-git:2.40.0 as git
 # NOTE: don't forget to also update `latest` tag
 #       regctl image copy microblinkdev/clang-devenv:14.0.2 microblinkdev/clang-devenv:latest
 ##------------------------------------------------------------------------------
-FROM microblinkdev/amazonlinux-clang:16.0.1
+FROM microblinkdev/amazonlinux-clang:16.0.2
 
 COPY --from=ninja /usr/local/bin/ninja /usr/local/bin/
 COPY --from=git /usr/local /usr/local/
@@ -100,7 +100,7 @@ ARG UBER_ADB_TOOLS_VERSION=1.0.4
 RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
         cd /home/android-sdk/cmdline-tools/latest/bin/ && \
         yes | ./sdkmanager --licenses && \
-        ./sdkmanager 'platforms;android-33' 'build-tools;33.0.2' 'platforms;android-32' 'build-tools;32.0.0' && \
+        ./sdkmanager 'platform-tools' 'platforms;android-33' 'build-tools;33.0.2' 'platforms;android-32' 'build-tools;32.0.0' && \
         mkdir -p /home/source           && \
         mkdir -p /home/build            && \
         mkdir -p /home/test-data        && \
