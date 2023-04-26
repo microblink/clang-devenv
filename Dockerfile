@@ -82,7 +82,7 @@ RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
 
 # Install Android SDK
 RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
-        yum -y install java-11-amazon-corretto-devel && \
+        yum -y install java-17-amazon-corretto-devel && \
         cd /home && mkdir android-sdk && cd android-sdk && \
         curl -L -o sdk.zip https://dl.google.com/android/repository/commandlinetools-linux-6858069_latest.zip && \
         unzip sdk.zip && rm -f sdk.zip && \
