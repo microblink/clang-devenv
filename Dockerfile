@@ -110,11 +110,11 @@ RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
         curl -L -o uber-adb-tools.jar https://github.com/patrickfav/uber-adb-tools/releases/download/v${UBER_ADB_TOOLS_VERSION}/uber-adb-tools-${UBER_ADB_TOOLS_VERSION}.jar;  \
     fi
 
-# download and install latest chrome
+# download and install latest chrome and node/npm, needed for emscripten tests
 RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
         cd /home && \
         curl -o chrome.rpm https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
-        yum -y install chrome.rpm && \
+        yum -y install chrome.rpm npm && \
         rm chrome.rpm; \
     fi
 
