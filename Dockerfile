@@ -42,7 +42,7 @@ RUN ln -s /usr/local/bin/clang /usr/bin/clang && \
     ln -s /usr/local/bin/llvm-nm /usr/bin/nm && \
     ln -s /usr/local/bin/llvm-ranlib /usr/bin/ranlib
 
-ARG CMAKE_VERSION=3.26.4
+ARG CMAKE_VERSION=3.27.8
 ARG BUILDPLATFORM
 
 # download and install CMake
@@ -56,7 +56,7 @@ RUN cd /home && \
     cd .. && \
     rm -rf *
 
-ARG CONAN_VERSION=1.60.1
+ARG CONAN_VERSION=1.62.0
 
 # download and install conan, grip and virtualenv (pythong packages needed for build)
 RUN python3 -m pip install conan==${CONAN_VERSION} grip virtualenv
