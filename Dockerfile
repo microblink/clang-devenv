@@ -61,6 +61,9 @@ ARG CONAN_VERSION=1.62.0
 # download and install conan, grip and virtualenv (pythong packages needed for build)
 RUN python3 -m pip install conan==${CONAN_VERSION} grip virtualenv
 
+# install maven for purposes of building core-recognizer-runner artifacts
+RUN yum -y install maven
+
 ############################################
 # everything below this line is Intel-only #
 ############################################
