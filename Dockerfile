@@ -1,23 +1,18 @@
-FROM microblinkdev/amazonlinux-ninja:1.11.1-al2022 as ninja
-FROM microblinkdev/amazonlinux-git:2.41.0 as git
-
-# Amazon Linux 2 uses python3.7 by default
-# As of amazonlinux-clang:14.0.4, it ships with it's own latest python (3.10 for LLVM 14.0.4)
-# against which LLDB was built.
-# FROM microblinkdev/centos-python:3.8.3 as python
+FROM microblinkdev/microblink-ninja:1.11.1 as ninja
+FROM microblinkdev/microblink-git:2.43.0 as git
 
 ##------------------------------------------------------------------------------
 # NOTE: don't forget to also update `latest` tag
 #       regctl image copy microblinkdev/clang-devenv:14.0.2 microblinkdev/clang-devenv:latest
 ##------------------------------------------------------------------------------
-FROM microblinkdev/amazonlinux-clang:16.0.5
+FROM microblinkdev/microblink-clang:17.0.6
 
 COPY --from=ninja /usr/local/bin/ninja /usr/local/bin/
 COPY --from=git /usr/local /usr/local/
 
 # install LFS and setup global .gitignore for both
 # root and every other user logged with -u user:group docker run parameter
-RUN yum -y install openssh-clients dbus-tools which gtk3-devel zip bzip2 make gdb libXt perl-Digest-MD5 openssl-devel tar gzip zip unzip xz procps findutils perl-FindBin perl-lib perl-File-Compare glibc-langpack-en && \
+RUN apt install -y libgtk-3-0 zip bzip2 make libssl-dev gzip unzip file && \
     git lfs install && \
     echo "~*" >> /.gitignore_global && \
     echo ".DS_Store" >> /.gitignore_global && \
@@ -37,12 +32,11 @@ ENV NINJA_STATUS="[%f/%t %c/sec] "
 # and also replace binutils tools with LLVM version
 RUN ln -s /usr/local/bin/clang /usr/bin/clang && \
     ln -s /usr/local/bin/clang++ /usr/bin/clang++ && \
-    rm /usr/bin/nm /usr/bin/ranlib /usr/bin/ar && \
     ln -s /usr/local/bin/llvm-ar /usr/bin/ar && \
     ln -s /usr/local/bin/llvm-nm /usr/bin/nm && \
     ln -s /usr/local/bin/llvm-ranlib /usr/bin/ranlib
 
-ARG CMAKE_VERSION=3.27.8
+ARG CMAKE_VERSION=3.28.1
 ARG BUILDPLATFORM
 
 # download and install CMake
@@ -56,13 +50,13 @@ RUN cd /home && \
     cd .. && \
     rm -rf *
 
-ARG CONAN_VERSION=1.62.0
+ARG CONAN_VERSION=2.0.16
 
 # download and install conan, grip and virtualenv (pythong packages needed for build)
 RUN python3 -m pip install conan==${CONAN_VERSION} grip virtualenv
 
 # install maven for purposes of building core-recognizer-runner artifacts
-RUN yum -y install maven
+RUN apt install -y maven
 
 ############################################
 # everything below this line is Intel-only #
@@ -85,7 +79,7 @@ RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
 
 # Install Android SDK
 RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
-        yum -y install java-17-amazon-corretto-devel && \
+        apt install -y openjdk-17-jdk && \
         cd /home && mkdir android-sdk && cd android-sdk && \
         curl -L -o sdk.zip https://dl.google.com/android/repository/commandlinetools-linux-6858069_latest.zip && \
         unzip sdk.zip && rm -f sdk.zip && \
@@ -116,11 +110,18 @@ RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
 # download and install latest chrome and node/npm, needed for emscripten tests
 RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
         cd /home && \
-        curl -o chrome.rpm https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
-        yum -y install chrome.rpm npm && \
-        rm chrome.rpm; \
+        curl -o chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
+        apt install -y ./chrome.deb ca-certificates gnupg --fix-broken && \
+        rm chrome.deb; \
+        mkdir -p /etc/apt/keyrings; \
+        curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg; \
+        echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list; \
+        apt update; \
+        apt install -y nodejs; \
     fi
 
-# Set location of GCC libs in AmazonLinux 2022
-ENV LIBRARY_PATH="/usr/lib/gcc/aarch64-amazon-linux/11:/usr/lib/gcc/x86_64-amazon-linux/11"
+RUN apt autoremove && apt clean
+
+# Set location of GCC libs
+ENV LIBRARY_PATH="/usr/lib/gcc/aarch64-linux-gnu/11:/usr/lib/gcc/x86_64-linux-gnu/11"
 
