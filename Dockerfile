@@ -28,13 +28,13 @@ RUN apt install -y libgtk-3-0 zip bzip2 make libssl-dev gzip unzip file && \
 
 ENV NINJA_STATUS="[%f/%t %c/sec] "
 
-# create gcc/g++ symlinks in /usr/bin (compatibility with legacy clang conan profile)
+# create gcc/g++ symlinks in /usr/bin (compatibility with clang conan profile)
 # and also replace binutils tools with LLVM version
-RUN ln -s /usr/local/bin/clang /usr/bin/clang && \
-    ln -s /usr/local/bin/clang++ /usr/bin/clang++ && \
-    ln -s /usr/local/bin/llvm-ar /usr/bin/ar && \
-    ln -s /usr/local/bin/llvm-nm /usr/bin/nm && \
-    ln -s /usr/local/bin/llvm-ranlib /usr/bin/ranlib
+RUN ln -f -s /usr/local/bin/clang /usr/bin/clang && \
+    ln -f -s /usr/local/bin/clang++ /usr/bin/clang++ && \
+    ln -f -s /usr/local/bin/llvm-ar /usr/bin/ar && \
+    ln -f -s /usr/local/bin/llvm-nm /usr/bin/nm && \
+    ln -f -s /usr/local/bin/llvm-ranlib /usr/bin/ranlib
 
 ARG CMAKE_VERSION=3.28.1
 ARG BUILDPLATFORM
