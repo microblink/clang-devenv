@@ -12,7 +12,7 @@ COPY --from=git /usr/local /usr/local/
 
 # install LFS and setup global .gitignore for both
 # root and every other user logged with -u user:group docker run parameter
-RUN apt install -y libgtk-3-0 zip bzip2 make libssl-dev gzip unzip file pkg-config && \
+RUN apt install -y libgtk-3-dev zip bzip2 make libssl-dev gzip unzip file pkg-config && \
     git lfs install && \
     echo "~*" >> /.gitignore_global && \
     echo ".DS_Store" >> /.gitignore_global && \
@@ -125,4 +125,3 @@ RUN apt autoremove && apt clean
 
 # Set location of GCC libs
 ENV LIBRARY_PATH="/usr/lib/gcc/aarch64-linux-gnu/11:/usr/lib/gcc/x86_64-linux-gnu/11"
-
