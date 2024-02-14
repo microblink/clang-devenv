@@ -37,7 +37,7 @@ RUN ln -f -s /usr/local/bin/clang /usr/bin/clang && \
     ln -f -s /usr/local/bin/llvm-nm /usr/bin/nm && \
     ln -f -s /usr/local/bin/llvm-ranlib /usr/bin/ranlib
 
-ARG CMAKE_VERSION=3.28.2
+ARG CMAKE_VERSION=3.28.3
 ARG BUILDPLATFORM
 
 # download and install CMake
