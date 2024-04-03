@@ -95,10 +95,12 @@ ARG UBER_ADB_TOOLS_VERSION=1.0.4
 # install Android SDK and tools and create development folders (mount points)
 # note: this is a single run statement to prevent having two large docker layers when pushing
 #       (one containing the android SDK and another containing the chmod-ed SDK)
+# Note2: use platform-tools v34.0.1 due to a bug with the latest v35: https://issuetracker.google.com/issues/327026299
 RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
         cd /home/android-sdk/cmdline-tools/latest/bin/ && \
         yes | ./sdkmanager --licenses && \
-        ./sdkmanager 'platform-tools' 'platforms;android-33' 'build-tools;33.0.2' 'platforms;android-32' 'build-tools;32.0.0' && \
+        ./sdkmanager 'platforms;android-33' 'build-tools;33.0.2' 'platforms;android-32' 'build-tools;32.0.0' && \
+        cd /home/android-sdk && curl -L -o platform-tools.zip https://dl.google.com/android/repository/platform-tools_r34.0.1-linux.zip && unzip -o platform-tools.zip && rm platform-tools.zip && \
         mkdir -p /home/source           && \
         mkdir -p /home/build            && \
         mkdir -p /home/test-data        && \
