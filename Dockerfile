@@ -57,7 +57,7 @@ ARG CONAN_VERSION=2.2.2
 RUN python3 -m pip install conan==${CONAN_VERSION} grip virtualenv
 
 # install maven for purposes of building core-recognizer-runner artifacts
-RUN apt install -y maven
+RUN apt update && apt install -y maven
 
 ############################################
 # everything below this line is Intel-only #
