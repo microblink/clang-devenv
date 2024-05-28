@@ -1,11 +1,11 @@
-FROM microblinkdev/microblink-ninja:1.11.1 as ninja
-FROM microblinkdev/microblink-git:2.43.0 as git
+FROM microblinkdev/microblink-ninja:1.12.1 as ninja
+FROM microblinkdev/microblink-git:2.45.1 as git
 
 ##------------------------------------------------------------------------------
 # NOTE: don't forget to also update `latest` tag
 #       regctl image copy microblinkdev/clang-devenv:14.0.2 microblinkdev/clang-devenv:latest
 ##------------------------------------------------------------------------------
-FROM microblinkdev/microblink-clang:17.0.6
+FROM microblinkdev/microblink-clang:18.1.6
 
 COPY --from=ninja /usr/local/bin/ninja /usr/local/bin/
 COPY --from=git /usr/local /usr/local/
@@ -37,7 +37,7 @@ RUN ln -f -s /usr/local/bin/clang /usr/bin/clang && \
     ln -f -s /usr/local/bin/llvm-nm /usr/bin/nm && \
     ln -f -s /usr/local/bin/llvm-ranlib /usr/bin/ranlib
 
-ARG CMAKE_VERSION=3.29.0
+ARG CMAKE_VERSION=3.29.3
 ARG BUILDPLATFORM
 
 # download and install CMake
@@ -51,7 +51,7 @@ RUN cd /home && \
     cd .. && \
     rm -rf *
 
-ARG CONAN_VERSION=2.2.2
+ARG CONAN_VERSION=2.3.2
 
 # download and install conan, grip and virtualenv (pythong packages needed for build)
 RUN python3 -m pip install conan==${CONAN_VERSION} grip virtualenv
@@ -63,7 +63,7 @@ RUN apt update && apt install -y maven
 # everything below this line is Intel-only #
 ############################################
 
-ARG WABT_VERSION=1.0.33
+ARG WABT_VERSION=1.0.35
 
 # download and install WASM binary tools, used for wasm validation
 RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
@@ -96,10 +96,12 @@ ARG UBER_ADB_TOOLS_VERSION=1.0.4
 # note: this is a single run statement to prevent having two large docker layers when pushing
 #       (one containing the android SDK and another containing the chmod-ed SDK)
 # Note2: use platform-tools v34.0.1 due to a bug with the latest v35: https://issuetracker.google.com/issues/327026299
+# Note3: use platforms;android-31 because android exe runner requires target SDK 31 in order to be able to access filesystem
+#        for testing purposes
 RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
         cd /home/android-sdk/cmdline-tools/latest/bin/ && \
         yes | ./sdkmanager --licenses && \
-        ./sdkmanager 'platforms;android-33' 'build-tools;33.0.2' 'platforms;android-32' 'build-tools;32.0.0' && \
+        ./sdkmanager 'build-tools;34.0.0' 'platforms;android-34' 'build-tools;33.0.3' 'platforms;android-31' && \
         cd /home/android-sdk && curl -L -o platform-tools.zip https://dl.google.com/android/repository/platform-tools_r34.0.1-linux.zip && unzip -o platform-tools.zip && rm platform-tools.zip && \
         mkdir -p /home/source           && \
         mkdir -p /home/build            && \
@@ -127,4 +129,4 @@ RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
 RUN apt autoremove && apt clean
 
 # Set location of GCC libs
-ENV LIBRARY_PATH="/usr/lib/gcc/aarch64-linux-gnu/11:/usr/lib/gcc/x86_64-linux-gnu/11"
+ENV LIBRARY_PATH="/usr/lib/gcc/aarch64-linux-gnu/13:/usr/lib/gcc/x86_64-linux-gnu/13"
