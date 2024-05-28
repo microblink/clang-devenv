@@ -51,13 +51,19 @@ RUN cd /home && \
     cd .. && \
     rm -rf *
 
+# install maven for purposes of building core-recognizer-runner artifacts
+# and pipx for supporting local installations of python packages
+RUN apt update && apt install -y maven pipx
+
 ARG CONAN_VERSION=2.3.2
 
-# download and install conan, grip and virtualenv (pythong packages needed for build)
-RUN python3 -m pip install conan==${CONAN_VERSION} grip virtualenv
+# download and install conan and grip
+RUN pipx install conan==${CONAN_VERSION} grip
 
-# install maven for purposes of building core-recognizer-runner artifacts
-RUN apt update && apt install -y maven
+# allow use of conan and grip installed in previous step by all users
+RUN chmod go+rx /root
+
+ENV PATH="/root/.local/bin:${PATH}"
 
 ############################################
 # everything below this line is Intel-only #
