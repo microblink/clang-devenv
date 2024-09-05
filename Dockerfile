@@ -87,6 +87,7 @@ RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
 # Install Android SDK
 RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
         apt install -y openjdk-17-jdk && \
+        update-java-alternatives --set java-1.17.0-openjdk-amd64 && \
         cd /home && mkdir android-sdk && cd android-sdk && \
         curl -L -o sdk.zip https://dl.google.com/android/repository/commandlinetools-linux-6858069_latest.zip && \
         unzip sdk.zip && rm -f sdk.zip && \
