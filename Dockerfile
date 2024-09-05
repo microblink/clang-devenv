@@ -122,7 +122,7 @@ RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
 # download and install latest chrome and node/npm, needed for emscripten tests
 RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
         cd /home && \
-        curl -o chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
+        curl -o chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_125.0.6422.141-1_amd64.deb && \
         apt update && \
         apt install -y ./chrome.deb ca-certificates gnupg --fix-broken && \
         rm chrome.deb && \
