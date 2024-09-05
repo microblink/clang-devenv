@@ -108,7 +108,7 @@ ARG UBER_ADB_TOOLS_VERSION=1.0.4
 RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
         cd /home/android-sdk/cmdline-tools/latest/bin/ && \
         yes | ./sdkmanager --licenses && \
-        ./sdkmanager 'build-tools;34.0.0' 'platforms;android-34' 'build-tools;33.0.3' 'platforms;android-31' && \
+        ./sdkmanager 'cmake;3.22.1' 'build-tools;34.0.0' 'platforms;android-34' 'build-tools;33.0.3' 'platforms;android-31' && \
         cd /home/android-sdk && curl -L -o platform-tools.zip https://dl.google.com/android/repository/platform-tools_r34.0.1-linux.zip && unzip -o platform-tools.zip && rm platform-tools.zip && \
         mkdir -p /home/source           && \
         mkdir -p /home/build            && \
