@@ -119,10 +119,14 @@ RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
         curl -L -o uber-adb-tools.jar https://github.com/patrickfav/uber-adb-tools/releases/download/v${UBER_ADB_TOOLS_VERSION}/uber-adb-tools-${UBER_ADB_TOOLS_VERSION}.jar;  \
     fi
 
+# Chrome version list can be found here: https://www.ubuntuupdates.org/package/google_chrome/stable/main/base/google-chrome-stable?id=202706&page=3
+# Can also be "current" to use the latest version
+ARG CHROME_VERSION=125.0.6422.141-1
+
 # download and install latest chrome and node/npm, needed for emscripten tests
 RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
         cd /home && \
-        curl -o chrome.deb https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_128.0.6613.118_amd64.deb && \
+        curl -o chrome.deb -L https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}_amd64.deb && \
         apt update && \
         apt install -y ./chrome.deb ca-certificates gnupg --fix-broken && \
         rm chrome.deb && \
