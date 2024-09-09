@@ -63,7 +63,14 @@ RUN pipx install conan==${CONAN_VERSION} grip
 # allow use of conan and grip installed in previous step by all users
 RUN chmod go+rx /root
 
+# prepare mount points
+RUN mkdir -p /home/source           && \
+    mkdir -p /home/build            && \
+    mkdir -p /home/test-data        && \
+    mkdir -p /home/secure-test-data
+
 ENV PATH="/root/.local/bin:${PATH}"
+
 
 ############################################
 # everything below this line is Intel-only #
@@ -110,10 +117,6 @@ RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
         yes | ./sdkmanager --licenses && \
         ./sdkmanager 'cmake;3.22.1' 'build-tools;34.0.0' 'platforms;android-34' 'build-tools;33.0.3' 'platforms;android-31' && \
         cd /home/android-sdk && curl -L -o platform-tools.zip https://dl.google.com/android/repository/platform-tools_r34.0.1-linux.zip && unzip -o platform-tools.zip && rm platform-tools.zip && \
-        mkdir -p /home/source           && \
-        mkdir -p /home/build            && \
-        mkdir -p /home/test-data        && \
-        mkdir -p /home/secure-test-data && \
         chmod --recursive 777 /home     && \
         cd /home/android-sdk/           && \
         curl -L -o uber-adb-tools.jar https://github.com/patrickfav/uber-adb-tools/releases/download/v${UBER_ADB_TOOLS_VERSION}/uber-adb-tools-${UBER_ADB_TOOLS_VERSION}.jar;  \
