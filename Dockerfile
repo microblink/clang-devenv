@@ -1,11 +1,11 @@
-FROM microblinkdev/microblink-ninja:1.12.1 as ninja
-FROM microblinkdev/microblink-git:2.45.1 as git
+FROM docker.io/microblinkdev/microblink-ninja:1.12.1 as ninja
+FROM docker.io/microblinkdev/microblink-git:2.45.1 as git
 
 ##------------------------------------------------------------------------------
 # NOTE: don't forget to also update `latest` tag
 #       regctl image copy microblinkdev/clang-devenv:14.0.2 microblinkdev/clang-devenv:latest
 ##------------------------------------------------------------------------------
-FROM microblinkdev/microblink-clang:18.1.6
+FROM docker.io/microblinkdev/microblink-clang:18.1.6
 
 COPY --from=ninja /usr/local/bin/ninja /usr/local/bin/
 COPY --from=git /usr/local /usr/local/
