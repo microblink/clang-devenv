@@ -115,8 +115,8 @@ ARG UBER_ADB_TOOLS_VERSION=1.0.4
 RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
         cd /home/android-sdk/cmdline-tools/latest/bin/ && \
         yes | ./sdkmanager --licenses && \
-        ./sdkmanager 'cmake;3.22.1' 'build-tools;35.0.0' 'platforms;android-35' && \
-        cd /home/android-sdk && curl -L -o platform-tools.zip https://dl.google.com/android/repository/platform-tools_r35.0.2-linux.zip && unzip -o platform-tools.zip && rm platform-tools.zip && \
+        ./sdkmanager 'cmake;3.22.1' 'build-tools;35.0.0' 'platforms;android-35' 'build-tools;33.0.3' 'platforms;android-31' && \
+        cd /home/android-sdk && curl -L -o platform-tools.zip https://dl.google.com/android/repository/platform-tools_r34.0.1-linux.zip && unzip -o platform-tools.zip && rm platform-tools.zip && \
         chmod --recursive 777 /home     && \
         cd /home/android-sdk/           && \
         curl -L -o uber-adb-tools.jar https://github.com/patrickfav/uber-adb-tools/releases/download/v${UBER_ADB_TOOLS_VERSION}/uber-adb-tools-${UBER_ADB_TOOLS_VERSION}.jar;  \
