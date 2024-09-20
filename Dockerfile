@@ -37,7 +37,7 @@ RUN ln -f -s /usr/local/bin/clang /usr/bin/clang && \
     ln -f -s /usr/local/bin/llvm-nm /usr/bin/nm && \
     ln -f -s /usr/local/bin/llvm-ranlib /usr/bin/ranlib
 
-ARG CMAKE_VERSION=3.29.3
+ARG CMAKE_VERSION=3.30.3
 ARG BUILDPLATFORM
 
 # download and install CMake
@@ -55,7 +55,7 @@ RUN cd /home && \
 # and pipx for supporting local installations of python packages
 RUN apt update && apt install -y maven pipx
 
-ARG CONAN_VERSION=2.3.2
+ARG CONAN_VERSION=2.7.1
 
 # download and install conan and grip
 RUN pipx install conan==${CONAN_VERSION} grip
@@ -115,8 +115,8 @@ ARG UBER_ADB_TOOLS_VERSION=1.0.4
 RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
         cd /home/android-sdk/cmdline-tools/latest/bin/ && \
         yes | ./sdkmanager --licenses && \
-        ./sdkmanager 'cmake;3.22.1' 'build-tools;34.0.0' 'platforms;android-34' 'build-tools;33.0.3' 'platforms;android-31' && \
-        cd /home/android-sdk && curl -L -o platform-tools.zip https://dl.google.com/android/repository/platform-tools_r34.0.1-linux.zip && unzip -o platform-tools.zip && rm platform-tools.zip && \
+        ./sdkmanager 'cmake;3.22.1' 'build-tools;35.0.0' 'platforms;android-35' && \
+        cd /home/android-sdk && curl -L -o platform-tools.zip https://dl.google.com/android/repository/platform-tools_r35.0.2-linux.zip && unzip -o platform-tools.zip && rm platform-tools.zip && \
         chmod --recursive 777 /home     && \
         cd /home/android-sdk/           && \
         curl -L -o uber-adb-tools.jar https://github.com/patrickfav/uber-adb-tools/releases/download/v${UBER_ADB_TOOLS_VERSION}/uber-adb-tools-${UBER_ADB_TOOLS_VERSION}.jar;  \
