@@ -1,5 +1,5 @@
-FROM docker.io/microblinkdev/microblink-ninja:1.12.1 as ninja
-FROM docker.io/microblinkdev/microblink-git:2.45.1 as git
+FROM docker.io/microblinkdev/microblink-ninja:1.12.1 AS ninja
+FROM docker.io/microblinkdev/microblink-git:2.45.1 AS git
 
 ##------------------------------------------------------------------------------
 # NOTE: don't forget to also update `latest` tag
