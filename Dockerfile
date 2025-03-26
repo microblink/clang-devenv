@@ -124,7 +124,7 @@ RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
 
 # Chrome version list can be found here: https://www.ubuntuupdates.org/package/google_chrome/stable/main/base/google-chrome-stable?id=202706&page=3
 # Can also be "current" to use the latest version
-ARG CHROME_VERSION=125.0.6422.141-1
+ARG CHROME_VERSION=134.0.6998.165-1
 
 # download and install latest chrome and node/npm, needed for emscripten tests
 RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
