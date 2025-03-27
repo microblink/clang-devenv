@@ -1,4 +1,6 @@
-FROM docker.io/microblinkdev/microblink-ninja:1.12.1 AS ninja
+ARG BUILDPLATFORM
+
+FROM --platform=$BUILDPLATFORM docker.io/microblinkdev/microblink-ninja:1.12.1 AS ninja
 FROM docker.io/microblinkdev/microblink-git:2.45.1 AS git
 
 ##------------------------------------------------------------------------------
@@ -6,6 +8,12 @@ FROM docker.io/microblinkdev/microblink-git:2.45.1 AS git
 #       regctl image copy microblinkdev/clang-devenv:14.0.2 microblinkdev/clang-devenv:latest
 ##------------------------------------------------------------------------------
 FROM docker.io/microblinkdev/microblink-clang:18.1.6
+
+ARG BUILDPLATFORM
+ARG TARGETPLATFORM
+
+# Assert that TARGETPLATFORM is the same as BUILDPLATFORM
+RUN if [ "$TARGETPLATFORM" != "$BUILDPLATFORM" ]; then echo "TARGETPLATFORM is not the same as BUILDPLATFORM"; exit 1; fi
 
 COPY --from=ninja /usr/local/bin/ninja /usr/local/bin/
 COPY --from=git /usr/local /usr/local/
@@ -38,11 +46,10 @@ RUN ln -f -s /usr/local/bin/clang /usr/bin/clang && \
     ln -f -s /usr/local/bin/llvm-ranlib /usr/bin/ranlib
 
 ARG CMAKE_VERSION=3.30.3
-ARG BUILDPLATFORM
 
 # download and install CMake
 RUN cd /home && \
-    if [ "$BUILDPLATFORM" == "linux/arm64" ]; then arch=aarch64; else arch=x86_64; fi && \
+    if [ "$TARGETPLATFORM" == "linux/arm64" ]; then arch=aarch64; else arch=x86_64; fi && \
     curl -o cmake.tar.gz -L https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-${arch}.tar.gz && \
     tar xf cmake.tar.gz && \
     cd cmake-${CMAKE_VERSION}-linux-${arch} && \
@@ -76,10 +83,10 @@ ENV PATH="/root/.local/bin:${PATH}"
 # everything below this line is Intel-only #
 ############################################
 
-ARG WABT_VERSION=1.0.35
+ARG WABT_VERSION=1.0.36
 
 # download and install WASM binary tools, used for wasm validation
-RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
+RUN if [ "$TARGETPLATFORM" == "linux/amd64" ]; then \
         cd /home && \
         git clone --depth 1 --shallow-submodules --branch ${WABT_VERSION} --recursive  https://github.com/WebAssembly/wabt && \
         mkdir wabt-build && \
@@ -92,7 +99,7 @@ RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
     fi
 
 # Install Android SDK
-RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
+RUN if [ "$TARGETPLATFORM" == "linux/amd64" ]; then \
         apt install -y openjdk-21-jdk && \
         update-java-alternatives --set java-1.21.0-openjdk-amd64 && \
         cd /home && mkdir android-sdk && cd android-sdk && \
@@ -112,7 +119,7 @@ ARG UBER_ADB_TOOLS_VERSION=1.0.4
 # Note2: use platform-tools v34.0.1 due to a bug with the latest v35: https://issuetracker.google.com/issues/327026299
 # Note3: use platforms;android-31 because android exe runner requires target SDK 31 in order to be able to access filesystem
 #        for testing purposes
-RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
+RUN if [ "$TARGETPLATFORM" == "linux/amd64" ]; then \
         cd /home/android-sdk/cmdline-tools/latest/bin/ && \
         yes | ./sdkmanager --licenses && \
         ./sdkmanager 'cmake;3.22.1' 'build-tools;35.0.0' 'platforms;android-35' 'build-tools;33.0.3' 'platforms;android-31' && \
@@ -127,7 +134,7 @@ RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
 ARG CHROME_VERSION=134.0.6998.165-1
 
 # download and install latest chrome and node/npm, needed for emscripten tests
-RUN if [ "$BUILDPLATFORM" == "linux/amd64" ]; then \
+RUN if [ "$TARGETPLATFORM" == "linux/amd64" ]; then \
         cd /home && \
         curl -o chrome.deb -L https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}_amd64.deb && \
         apt update && \
