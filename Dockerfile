@@ -1,13 +1,13 @@
 ARG BUILDPLATFORM
 
 FROM --platform=$BUILDPLATFORM docker.io/microblinkdev/microblink-ninja:1.12.1 AS ninja
-FROM docker.io/microblinkdev/microblink-git:2.45.1 AS git
+FROM docker.io/microblinkdev/microblink-git:2.49.0 AS git
 
 ##------------------------------------------------------------------------------
 # NOTE: don't forget to also update `latest` tag
 #       regctl image copy microblinkdev/clang-devenv:14.0.2 microblinkdev/clang-devenv:latest
 ##------------------------------------------------------------------------------
-FROM docker.io/microblinkdev/microblink-clang:18.1.6
+FROM docker.io/microblinkdev/microblink-clang:20.1.2
 
 ARG BUILDPLATFORM
 ARG TARGETPLATFORM
@@ -62,7 +62,7 @@ RUN cd /home && \
 # and pipx for supporting local installations of python packages
 RUN apt update && apt install -y maven pipx
 
-ARG CONAN_VERSION=2.7.1
+ARG CONAN_VERSION=2.13.0
 
 # download and install conan and grip
 RUN pipx install conan==${CONAN_VERSION} grip
