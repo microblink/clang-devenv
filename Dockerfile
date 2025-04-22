@@ -45,7 +45,7 @@ RUN ln -f -s /usr/local/bin/clang /usr/bin/clang && \
     ln -f -s /usr/local/bin/llvm-nm /usr/bin/nm && \
     ln -f -s /usr/local/bin/llvm-ranlib /usr/bin/ranlib
 
-ARG CMAKE_VERSION=3.31.6
+ARG CMAKE_VERSION=4.0.1
 
 # download and install CMake
 RUN cd /home && \
@@ -62,7 +62,7 @@ RUN cd /home && \
 # and pipx for supporting local installations of python packages
 RUN apt update && apt install -y maven pipx
 
-ARG CONAN_VERSION=2.13.0
+ARG CONAN_VERSION=2.15.1
 
 # download and install conan and grip
 RUN pipx install conan==${CONAN_VERSION} grip
