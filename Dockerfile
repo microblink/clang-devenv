@@ -7,7 +7,7 @@ FROM docker.io/microblinkdev/microblink-git:2.49.0 AS git
 # NOTE: don't forget to also update `latest` tag
 #       regctl image copy microblinkdev/clang-devenv:14.0.2 microblinkdev/clang-devenv:latest
 ##------------------------------------------------------------------------------
-FROM docker.io/microblinkdev/microblink-clang:20.1.3
+FROM docker.io/microblinkdev/microblink-clang:20.1.4
 
 ARG BUILDPLATFORM
 ARG TARGETPLATFORM
@@ -45,7 +45,7 @@ RUN ln -f -s /usr/local/bin/clang /usr/bin/clang && \
     ln -f -s /usr/local/bin/llvm-nm /usr/bin/nm && \
     ln -f -s /usr/local/bin/llvm-ranlib /usr/bin/ranlib
 
-ARG CMAKE_VERSION=4.0.1
+ARG CMAKE_VERSION=4.0.2
 
 # download and install CMake
 RUN cd /home && \
@@ -62,7 +62,7 @@ RUN cd /home && \
 # and pipx for supporting local installations of python packages
 RUN apt update && apt install -y maven pipx
 
-ARG CONAN_VERSION=2.15.1
+ARG CONAN_VERSION=2.16.1
 
 # download and install conan and grip
 RUN pipx install conan==${CONAN_VERSION} grip
