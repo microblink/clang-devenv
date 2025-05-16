@@ -7,7 +7,7 @@ FROM docker.io/microblinkdev/microblink-git:2.49.0 AS git
 # NOTE: don't forget to also update `latest` tag
 #       regctl image copy microblinkdev/clang-devenv:14.0.2 microblinkdev/clang-devenv:latest
 ##------------------------------------------------------------------------------
-FROM docker.io/microblinkdev/microblink-clang:20.1.4
+FROM docker.io/microblinkdev/microblink-clang:20.1.5
 
 ARG BUILDPLATFORM
 ARG TARGETPLATFORM
