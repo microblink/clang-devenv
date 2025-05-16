@@ -133,7 +133,7 @@ RUN if [ "$TARGETPLATFORM" == "linux/amd64" ]; then \
 
 # Chrome version list can be found here: https://www.ubuntuupdates.org/package/google_chrome/stable/main/base/google-chrome-stable?id=202706&page=3
 # Can also be "current" to use the latest version
-ARG CHROME_VERSION=136.0.7103.92-1
+ARG CHROME_VERSION=136.0.7103.113-1
 
 # download and install latest chrome and node/npm, needed for emscripten tests
 RUN if [ "$TARGETPLATFORM" == "linux/amd64" ]; then \
