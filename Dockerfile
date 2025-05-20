@@ -65,11 +65,9 @@ RUN apt update && apt install -y maven pipx
 ARG CONAN_VERSION=2.16.1
 
 # download and install conan and grip
-RUN pipx install conan==${CONAN_VERSION}
-RUN pipx install grip
-RUN pipx install uv
+RUN pipx install conan==${CONAN_VERSION} grip uv
 
-# allow use of conan and grip installed in previous step by all users
+# allow use of conan, uv and grip installed in previous step by all users
 RUN chmod go+rx /root
 
 # prepare mount points
