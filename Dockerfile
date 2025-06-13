@@ -63,7 +63,7 @@ ARG BAZELISK_VERSION=1.26.0
 
 RUN cd /home && \
     if [ "$TARGETPLATFORM" == "linux/arm64" ]; then arch=arm64; else arch=amd64; fi && \
-    curl -o /usr/local/bin/bazel -L https://github.com/bazelbuild/bazelisk/releases/download/v${BAZELISK_VERSION}/bazelisk-linux-${arch} \
+    curl -o /usr/local/bin/bazel -L https://github.com/bazelbuild/bazelisk/releases/download/v${BAZELISK_VERSION}/bazelisk-linux-${arch} && \
     chmod +x /usr/local/bin/bazel
 
 # install maven for purposes of building core-recognizer-runner artifacts
