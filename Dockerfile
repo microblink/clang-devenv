@@ -7,7 +7,7 @@ FROM docker.io/microblinkdev/microblink-git:2.49.0 AS git
 # NOTE: don't forget to also update `latest` tag
 #       regctl image copy microblinkdev/clang-devenv:14.0.2 microblinkdev/clang-devenv:latest
 ##------------------------------------------------------------------------------
-FROM docker.io/microblinkdev/microblink-clang:20.1.5
+FROM docker.io/microblinkdev/microblink-clang:20.1.7
 
 ARG BUILDPLATFORM
 ARG TARGETPLATFORM
@@ -45,7 +45,7 @@ RUN ln -f -s /usr/local/bin/clang /usr/bin/clang && \
     ln -f -s /usr/local/bin/llvm-nm /usr/bin/nm && \
     ln -f -s /usr/local/bin/llvm-ranlib /usr/bin/ranlib
 
-ARG CMAKE_VERSION=4.0.2
+ARG CMAKE_VERSION=4.0.3
 
 # download and install CMake
 RUN cd /home && \
@@ -57,6 +57,14 @@ RUN cd /home && \
     find . -type f -exec mv \{} /usr/local/\{} \; && \
     cd .. && \
     rm -rf *
+
+# download and install bazelisk
+ARG BAZELISK_VERSION=1.26.0
+
+RUN cd /home && \
+    if [ "$TARGETPLATFORM" == "linux/arm64" ]; then arch=arm64; else arch=amd64; fi && \
+    curl -o /usr/local/bin/bazel -L https://github.com/bazelbuild/bazelisk/releases/download/v${BAZELISK_VERSION}/bazelisk-linux-${arch} \
+    chmod +x /usr/local/bin/bazel
 
 # install maven for purposes of building core-recognizer-runner artifacts
 # and pipx for supporting local installations of python packages
