@@ -117,6 +117,7 @@ RUN if [ "$TARGETPLATFORM" == "linux/amd64" ]; then \
     fi
 
 ENV ANDROID_SDK_ROOT="/home/android-sdk"    \
+    ANDROID_HOME="/home/android-sdk"    \
     PATH="${PATH}:/home/android-sdk/platform-tools:/home/android-sdk/cmdline-tools/latest/bin"
 
 ARG UBER_ADB_TOOLS_VERSION=1.0.4
