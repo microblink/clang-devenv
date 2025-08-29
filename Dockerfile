@@ -154,6 +154,7 @@ RUN if [ "$TARGETPLATFORM" == "linux/amd64" ]; then \
         echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
         apt update && \
         apt install -y nodejs; \
+        npm install -g pnpm@latest; \
     fi
 
 RUN apt autoremove && apt clean
