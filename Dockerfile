@@ -1,7 +1,7 @@
 ARG BUILDPLATFORM
 
 FROM --platform=$BUILDPLATFORM docker.io/microblinkdev/microblink-ninja:1.13.1 AS ninja
-FROM docker.io/microblinkdev/microblink-git:2.50.1 AS git
+FROM docker.io/microblinkdev/microblink-git:2.51.0 AS git
 
 ##------------------------------------------------------------------------------
 # NOTE: don't forget to also update `latest` tag
