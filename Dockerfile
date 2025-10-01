@@ -86,6 +86,32 @@ RUN mkdir -p /home/source           && \
 
 ENV PATH="/root/.local/bin:${PATH}"
 
+# Install SonarScanner CLI and DependencyCheck
+ARG SONARSCANNER_VERSION=7.2.0.5079
+RUN if [ "$TARGETPLATFORM" == "linux/amd64" ]; then \
+        cd /home && \
+        curl -o sonar-scanner.zip -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONARSCANNER_VERSION}.zip && \
+        unzip sonar-scanner.zip && \
+        mv sonar-scanner-${SONARSCANNER_VERSION} /opt/sonar-scanner && \
+        rm sonar-scanner.zip && \
+        ln -s /opt/sonar-scanner/bin/sonar-scanner /usr/local/bin/sonar-scanner && \
+        VERSION=$(curl -s https://dependency-check.github.io/DependencyCheck/current.txt) && \
+        curl -Ls "https://github.com/dependency-check/DependencyCheck/releases/download/v$VERSION/dependency-check-$VERSION-release.zip" --output dependency-check.zip && \
+        unzip dependency-check.zip && \
+        mv dependency-check /usr/share/dependency-check; \
+    fi
+RUN if [[ "$TARGETPLATFORM" == "linux/arm64" || "$TARGETPLATFORM" == "linux/arm64/v8" ]]; then \
+        cd /home && \
+        curl -o sonar-scanner.zip -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONARSCANNER_VERSION}-linux-aarch64.zip && \
+        unzip sonar-scanner.zip && \
+        mv sonar-scanner-${SONARSCANNER_VERSION}-linux-aarch64 /opt/sonar-scanner && \
+        rm sonar-scanner.zip && \
+        ln -s /opt/sonar-scanner/bin/sonar-scanner /usr/local/bin/sonar-scanner && \
+        VERSION=$(curl -s https://dependency-check.github.io/DependencyCheck/current.txt) && \
+        curl -Ls "https://github.com/dependency-check/DependencyCheck/releases/download/v$VERSION/dependency-check-$VERSION-release.zip" --output dependency-check.zip && \
+        unzip dependency-check.zip && \
+        mv dependency-check /usr/share/dependency-check; \
+    fi
 
 ############################################
 # everything below this line is Intel-only #
