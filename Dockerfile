@@ -21,7 +21,7 @@ COPY --from=git /usr/local /usr/local/
 # install LFS and setup global .gitignore for both
 # root and every other user logged with -u user:group docker run parameter
 RUN apt update && \
-    apt install -y libgtk-3-dev zip bzip2 make libssl-dev gzip unzip file pkg-config && \
+    apt install -y libgtk-3-dev zip bzip2 make libssl-dev gzip unzip file pkg-config lcov && \
     git lfs install && \
     echo "~*" >> /.gitignore_global && \
     echo ".DS_Store" >> /.gitignore_global && \
@@ -45,7 +45,7 @@ RUN ln -f -s /usr/local/bin/clang /usr/bin/clang && \
     ln -f -s /usr/local/bin/llvm-nm /usr/bin/nm && \
     ln -f -s /usr/local/bin/llvm-ranlib /usr/bin/ranlib
 
-ARG CMAKE_VERSION=4.0.3
+ARG CMAKE_VERSION=4.1.2
 
 # download and install CMake
 RUN cd /home && \
@@ -59,7 +59,7 @@ RUN cd /home && \
     rm -rf *
 
 # download and install bazelisk
-ARG BAZELISK_VERSION=1.26.0
+ARG BAZELISK_VERSION=1.27.0
 
 RUN cd /home && \
     if [ "$TARGETPLATFORM" == "linux/arm64" ]; then arch=arm64; else arch=amd64; fi && \
