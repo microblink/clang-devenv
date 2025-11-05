@@ -1,13 +1,13 @@
 ARG BUILDPLATFORM
 
 FROM --platform=$BUILDPLATFORM docker.io/microblinkdev/microblink-ninja:1.13.1 AS ninja
-FROM docker.io/microblinkdev/microblink-git:2.51.0 AS git
+FROM docker.io/microblinkdev/microblink-git:2.51.2 AS git
 
 ##------------------------------------------------------------------------------
 # NOTE: don't forget to also update `latest` tag
 #       regctl image copy microblinkdev/clang-devenv:14.0.2 microblinkdev/clang-devenv:latest
 ##------------------------------------------------------------------------------
-FROM docker.io/microblinkdev/microblink-clang:21.1.4
+FROM docker.io/microblinkdev/microblink-clang:21.1.5
 
 ARG BUILDPLATFORM
 ARG TARGETPLATFORM
@@ -117,7 +117,7 @@ RUN if [[ "$TARGETPLATFORM" == "linux/arm64" || "$TARGETPLATFORM" == "linux/arm6
 # everything below this line is Intel-only #
 ############################################
 
-ARG WABT_VERSION=1.0.36
+ARG WABT_VERSION=1.0.39
 
 # download and install WASM binary tools, used for wasm validation
 RUN if [ "$TARGETPLATFORM" == "linux/amd64" ]; then \
@@ -166,7 +166,7 @@ RUN if [ "$TARGETPLATFORM" == "linux/amd64" ]; then \
 
 # Chrome version list can be found here: https://www.ubuntuupdates.org/package/google_chrome/stable/main/base/google-chrome-stable?id=202706&page=3
 # Can also be "current" to use the latest version
-ARG CHROME_VERSION=136.0.7103.113-1
+ARG CHROME_VERSION=142.0.7444.59-1
 
 # download and install latest chrome and node/npm, needed for emscripten tests
 RUN if [ "$TARGETPLATFORM" == "linux/amd64" ]; then \
