@@ -45,7 +45,7 @@ RUN ln -f -s /usr/local/bin/clang /usr/bin/clang && \
     ln -f -s /usr/local/bin/llvm-nm /usr/bin/nm && \
     ln -f -s /usr/local/bin/llvm-ranlib /usr/bin/ranlib
 
-ARG CMAKE_VERSION=4.1.2
+ARG CMAKE_VERSION=4.2.0
 
 # download and install CMake
 RUN cd /home && \
@@ -166,7 +166,7 @@ RUN if [ "$TARGETPLATFORM" == "linux/amd64" ]; then \
 
 # Chrome version list can be found here: https://www.ubuntuupdates.org/package/google_chrome/stable/main/base/google-chrome-stable?id=202706&page=3
 # Can also be "current" to use the latest version
-ARG CHROME_VERSION=142.0.7444.59-1
+ARG CHROME_VERSION=142.0.7444.175-1
 
 # download and install latest chrome and node/npm, needed for emscripten tests
 RUN if [ "$TARGETPLATFORM" == "linux/amd64" ]; then \
