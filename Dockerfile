@@ -1,13 +1,13 @@
 ARG BUILDPLATFORM
 
 FROM --platform=$BUILDPLATFORM docker.io/microblinkdev/microblink-ninja:1.13.1 AS ninja
-FROM docker.io/microblinkdev/microblink-git:2.51.2 AS git
+FROM docker.io/microblinkdev/microblink-git:2.52.0 AS git
 
 ##------------------------------------------------------------------------------
 # NOTE: don't forget to also update `latest` tag
 #       regctl image copy microblinkdev/clang-devenv:14.0.2 microblinkdev/clang-devenv:latest
 ##------------------------------------------------------------------------------
-FROM docker.io/microblinkdev/microblink-clang:21.1.6
+FROM docker.io/microblinkdev/microblink-clang:21.1.7
 
 ARG BUILDPLATFORM
 ARG TARGETPLATFORM
@@ -45,7 +45,7 @@ RUN ln -f -s /usr/local/bin/clang /usr/bin/clang && \
     ln -f -s /usr/local/bin/llvm-nm /usr/bin/nm && \
     ln -f -s /usr/local/bin/llvm-ranlib /usr/bin/ranlib
 
-ARG CMAKE_VERSION=4.1.3
+ARG CMAKE_VERSION=4.2.0
 
 # download and install CMake
 RUN cd /home && \
