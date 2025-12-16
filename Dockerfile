@@ -7,7 +7,7 @@ FROM docker.io/microblinkdev/microblink-git:2.52.0 AS git
 # NOTE: don't forget to also update `latest` tag
 #       regctl image copy microblinkdev/clang-devenv:14.0.2 microblinkdev/clang-devenv:latest
 ##------------------------------------------------------------------------------
-FROM docker.io/microblinkdev/microblink-clang:21.1.7
+FROM docker.io/microblinkdev/microblink-clang:21.1.8
 
 ARG BUILDPLATFORM
 ARG TARGETPLATFORM
@@ -45,7 +45,7 @@ RUN ln -f -s /usr/local/bin/clang /usr/bin/clang && \
     ln -f -s /usr/local/bin/llvm-nm /usr/bin/nm && \
     ln -f -s /usr/local/bin/llvm-ranlib /usr/bin/ranlib
 
-ARG CMAKE_VERSION=4.2.0
+ARG CMAKE_VERSION=4.2.1
 
 # download and install CMake
 RUN cd /home && \
